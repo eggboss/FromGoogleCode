@@ -9,8 +9,27 @@ import org.apache.poi.ss.usermodel.Workbook;
 import com.esoon.excelimporter.exception.ImportException;
 import com.esoon.jdbc.SQLServerConnector;
 import com.esoon.resource.ResourceBundleAdapter;
-
+/**
+ * Excel檔案匯入處理實作
+ * @author kirk
+ *
+ */
 public class ExcelHandlerImpl implements IExcelHandler{
+	
+	/**
+	 * 取得JDBC Connection
+	 * 在resource.properties設定
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
+	protected Connection getConnection() throws ClassNotFoundException, SQLException{
+		String driverName = ResourceBundleAdapter.getResource("driverName");
+		String dbURL = ResourceBundleAdapter.getResource("dbURL");
+		String userName = ResourceBundleAdapter.getResource("userName");
+		String userPwd = ResourceBundleAdapter.getResource("userPwd");
+		return new SQLServerConnector(driverName, dbURL, userName, userPwd).getConnection();
+	}
 	
 	public void action(Workbook myExcel) throws ClassNotFoundException, SQLException{
 		String sql = "";
@@ -18,13 +37,9 @@ public class ExcelHandlerImpl implements IExcelHandler{
 		// TODO
 		
 		// get connection
-		String driverName = ResourceBundleAdapter.getResource("driverName");
-		String dbURL = ResourceBundleAdapter.getResource("dbURL");
-		String userName = ResourceBundleAdapter.getResource("userName");
-		String userPwd = ResourceBundleAdapter.getResource("userPwd");
+		Connection conn = getConnection();
 		
-		Connection conn = new SQLServerConnector(driverName, dbURL, userName, userPwd).getConnection();
-		System.out.println("get connection success!");
+		
 /*
 		conn.setAutoCommit(false);
 		
@@ -51,7 +66,7 @@ public class ExcelHandlerImpl implements IExcelHandler{
 	@Override
 	public boolean check(Workbook myExcel) throws ImportException {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 	
