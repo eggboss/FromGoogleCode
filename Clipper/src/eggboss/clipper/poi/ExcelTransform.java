@@ -1,70 +1,44 @@
 package eggboss.clipper.poi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.List;
+import java.io.IOException;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
-import eggboss.clipper.jdbc.SQLServerConnector;
-import eggboss.clipper.resource.ResourceBundleAdapter;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Workbook;
 
 public class ExcelTransform {
-	public static void main(String[] args) throws Exception{
-		// read Excel file
-		String filePath = "d:/WorkingSpace/workspaces/TWM/Clipper/sample/3月底的特休補休時數.XLS";
-		HSSFWorkbook excel = new ExcelReader().readFile(filePath);
-		
-		
-		// generate prepareStatement sql and Object set.
-		String sql = "";
-		List values = null;
-		// TODO
-		
-		// get connection
-		String driverName = ResourceBundleAdapter.getResource("driverName");
-		String dbURL = ResourceBundleAdapter.getResource("dbURL");
-		String userName = ResourceBundleAdapter.getResource("userName");
-		String userPwd = ResourceBundleAdapter.getResource("userPwd");
-		Connection conn = new SQLServerConnector(driverName, dbURL, userName, userPwd).getConnection();
-		
-		conn.setAutoCommit(false);
-		
-		// 應該是個批次寫入
-		PreparedStatement pstmt = conn.prepareStatement(sql);
-		for(int i=0; i<values.size(); i++){
-			pstmt.setObject(i+1, values.get(i));
-			pstmt.addBatch();
-		}
-		
-		
-		int [] counts = pstmt.executeBatch();
-		System.out.println("成功寫入" + counts + "筆資料！");
-		conn.commit();
-		
-		pstmt.close();
-		conn.close();
+	
+	private Workbook myExcel;
+	private IExcelHandler excelHandler;
+	
+	/**
+	 * 建構子
+	 * @param excel Workbook物件
+	 * @param excelHandler Excel檔案處理實作
+	 * @throws IOException
+	 */
+	public ExcelTransform(Workbook excel, IExcelHandler excelHandler) throws IOException{
+		this.excelHandler = excelHandler;
+		this.myExcel = excel;
 	}
 	
-/* batch sample
- * http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzaha/batchpre.htm
- * 
-connection.setAutoCommit(false);
-PreparedStatement statement = connection.prepareStatement("INSERT INTO TABLEX VALUES(?, ?)");
+	/**
+	 * 建構子
+	 * @param filePath 檔案路徑 
+	 * @param excelHandler Excel檔案處理實作
+	 * @throws IOException
+	 */
+	public ExcelTransform(String filePath, IExcelHandler excelHandler) throws IOException, InvalidFormatException{
+		this.excelHandler = excelHandler;
+		this.myExcel = new ExcelReader().readFile(filePath);
+	}
+	
+	/**
+	 * Workbook物件套用Excel檔案處理實作
+	 * @return
+	 * @throws Exception
+	 */
+	public int[] transfer() throws Exception{
+		return excelHandler.action(myExcel);
+	}
 
-statement.setInt(1, 1);
-statement.setString(2, "Cujo");
-statement.addBatch();
-
-statement.setInt(1, 2);
-statement.setString(2, "Fred");
-statement.addBatch();
-
-statement.setInt(1, 3);
-statement.setString(2, "Mark");
-statement.addBatch();
-
-int [] counts = statement.executeBatch();
-connection.commit();
-*/
 }
