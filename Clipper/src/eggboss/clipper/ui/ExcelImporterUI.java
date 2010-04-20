@@ -1,4 +1,4 @@
-package eggboss.clipper.ui;
+package com.esoon.excelimporter.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,8 +20,8 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
-import eggboss.clipper.poi.ExcelHandlerImpl;
-import eggboss.clipper.poi.ExcelTransform;
+import com.esoon.excelimporter.poi.ExcelHandlerImpl;
+import com.esoon.excelimporter.poi.ExcelTransform;
 
 //VS4E -- DO NOT REMOVE THIS LINE!
 public class ExcelImporterUI extends JFrame {

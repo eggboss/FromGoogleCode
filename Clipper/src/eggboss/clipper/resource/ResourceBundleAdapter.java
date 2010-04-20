@@ -1,4 +1,4 @@
-package eggboss.clipper.resource;
+package com.esoon.resource;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

@@ -1,4 +1,4 @@
-package eggboss.clipper.jdbc;
+package com.esoon.jdbc;
 
 import java.sql.Connection;
 

@@ -1,4 +1,4 @@
-package eggboss.clipper.poi;
+package com.esoon.excelimporter.poi;
 
 import java.io.FileInputStream;
 import java.io.IOException;

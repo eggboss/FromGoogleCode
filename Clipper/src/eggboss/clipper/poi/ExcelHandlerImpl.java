@@ -1,4 +1,4 @@
-package eggboss.clipper.poi;
+package com.esoon.excelimporter.poi;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
-import eggboss.clipper.jdbc.SQLServerConnector;
-import eggboss.clipper.resource.ResourceBundleAdapter;
+import com.esoon.jdbc.SQLServerConnector;
+import com.esoon.resource.ResourceBundleAdapter;
 
 public class ExcelHandlerImpl implements IExcelHandler{
 	
