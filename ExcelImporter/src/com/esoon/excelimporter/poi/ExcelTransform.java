@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import com.esoon.excelimporter.exception.ImportException;
+
 public class ExcelTransform {
 	
 	private Workbook myExcel;
@@ -37,8 +39,11 @@ public class ExcelTransform {
 	 * @return
 	 * @throws Exception
 	 */
-	public int[] transfer() throws Exception{
-		return excelHandler.action(myExcel);
+	public void transfer() throws ImportException, Exception{
+		if(!excelHandler.check(myExcel)){
+			throw new ImportException();
+		}
+		excelHandler.action(myExcel);
 	}
 
 }

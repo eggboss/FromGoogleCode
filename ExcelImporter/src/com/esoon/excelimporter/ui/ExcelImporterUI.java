@@ -20,6 +20,7 @@ import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 
+import com.esoon.excelimporter.exception.ImportException;
 import com.esoon.excelimporter.poi.ExcelHandlerImpl;
 import com.esoon.excelimporter.poi.ExcelTransform;
 
@@ -44,15 +45,15 @@ public class ExcelImporterUI extends JFrame {
 		add(getJLabel0(), new Constraints(new Leading(8, 10, 10), new Leading(8, 10, 10)));
 		add(getJTextField0(), new Constraints(new Leading(76, 107, 10, 10), new Leading(6, 12, 12)));
 		add(getJButton0(), new Constraints(new Bilateral(189, 12, 86), new Leading(3, 12, 12)));
-		add(getJButton2(), new Constraints(new Trailing(12, 12, 12), new Leading(41, 12, 12)));
-		add(getJButton1(), new Constraints(new Leading(134, 10, 10), new Leading(41, 12, 12)));
+		add(getJButton2(), new Constraints(new Trailing(12, 153, 153), new Leading(41, 12, 12)));
+		add(getJButton1(), new Constraints(new Trailing(136, 12, 12), new Leading(41, 12, 12)));
 		setSize(288, 79);
 	}
 
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setText("上傳1");
+			jButton1.setText("上傳客戶資料");
 			jButton1.addActionListener(new ActionListener() {
 	
 				public void actionPerformed(ActionEvent event) {
@@ -66,7 +67,13 @@ public class ExcelImporterUI extends JFrame {
 	private JButton getJButton2() {
 		if (jButton2 == null) {
 			jButton2 = new JButton();
-			jButton2.setText("上傳2");
+			jButton2.setText("上傳產品資料");
+			jButton2.addActionListener(new ActionListener() {
+	
+				public void actionPerformed(ActionEvent event) {
+					jButton2ActionActionPerformed(event);
+				}
+			});
 		}
 		return jButton2;
 	}
@@ -148,7 +155,7 @@ public class ExcelImporterUI extends JFrame {
 	    }
 	}
 
-	// 上傳檔案1
+	// 上傳客戶資料
 	private void jButton1ActionActionPerformed(ActionEvent event) {
 		try {
 			if(filePath!=null && !"".equals(filePath)){
@@ -156,17 +163,47 @@ public class ExcelImporterUI extends JFrame {
 				// 傳入Excel檔案路徑，及Excel處理實作。
 				new ExcelTransform(filePath, new ExcelHandlerImpl()).transfer();
 				
-				new JOptionPane().showMessageDialog(this, "上傳成功！");
+				JOptionPane.showMessageDialog(this, "上傳成功！");
 				
 				filePath = null;
 				this.getJTextField0().setText("");
+			}else{
+				JOptionPane.showMessageDialog(this, "請選擇檔案！");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			new JOptionPane().showMessageDialog(this, "資料庫錯誤！" + e.getMessage());
+			JOptionPane.showMessageDialog(this, "資料庫錯誤！" + e.getMessage());
+		} catch (ImportException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}  catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "檔案有錯，請重新選擇！" + e.getMessage());
+		}
+	}
+
+	// 上傳產品資料
+	private void jButton2ActionActionPerformed(ActionEvent event) {
+		try {
+			if(filePath!=null && !"".equals(filePath)){
+				
+				// 傳入Excel檔案路徑，及Excel處理實作。
+				new ExcelTransform(filePath, new ExcelHandlerImpl()).transfer();
+				
+				JOptionPane.showMessageDialog(this, "上傳成功！");
+				
+				filePath = null;
+				this.getJTextField0().setText("");
+			}else{
+				JOptionPane.showMessageDialog(this, "請選擇檔案！");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "資料庫錯誤！" + e.getMessage());
+		} catch (ImportException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			new JOptionPane().showMessageDialog(this, "檔案有錯，請重新選擇！" + e.getMessage());
+			JOptionPane.showMessageDialog(this, "檔案有錯，請重新選擇！" + e.getMessage());
 		}
 	}
 

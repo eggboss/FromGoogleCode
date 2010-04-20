@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Workbook;
 
+import com.esoon.excelimporter.exception.ImportException;
 import com.esoon.jdbc.SQLServerConnector;
 import com.esoon.resource.ResourceBundleAdapter;
 
 public class ExcelHandlerImpl implements IExcelHandler{
 	
-	public int[] action(Workbook myExcel) throws ClassNotFoundException, SQLException{
+	public void action(Workbook myExcel) throws ClassNotFoundException, SQLException{
 		String sql = "";
 		List values = null;
 		// TODO
@@ -45,8 +46,12 @@ public class ExcelHandlerImpl implements IExcelHandler{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return null;
+	}
+
+	@Override
+	public boolean check(Workbook myExcel) throws ImportException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	
