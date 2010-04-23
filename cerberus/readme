@@ -1,0 +1,25 @@
+cerberus.jar　使用步驟
+
+1.必要的JAR檔：
+	hwak.jar及其所需的JAR檔
+	commons-codec-1.3.jar
+	(From http://jakarta.apache.org/site/downloads/downloads_commons-codec.cgi)
+	
+2.JDK版本：
+	使用JDK1.5.0_08
+
+3.使用資料庫：
+	MySQL - sql/cerberus.sql
+
+4.密碼加密設定：
+	在其專案的根目錄(classesor src)下，建立/config/cerberus.properties檔
+	檔案內設置一參數passwdEncryptType，其值有四種NONE、MD5、SHA-1、BASE64。
+	
+ex：　passwdEncryptType="BASE64"
+
+5.驗證方式：
+	建立hornyu.cerberus.action.LoginCerberus的實體，使用login()方法並 傳入帳號、密碼當參數，
+	驗證成功後可用getUser()取得登入物件，	登入物件內包含授權物件，可使用登入物件的doAs()方法並傳入
+	TaskName檢查是否有這個Task的授權，其中TaskName記錄在DB之中。
+	
+	
