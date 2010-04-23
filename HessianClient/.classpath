@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_11"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ec_module_services"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ec_module_portal_core"/>
+	<classpathentry kind="lib" path="lib/hessian-3.0.20.jar" sourcepath="D:/resource/hessian/hessian-3.0.20-src.jar"/>
+	<classpathentry kind="lib" path="lib/spring-1.2.8.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
