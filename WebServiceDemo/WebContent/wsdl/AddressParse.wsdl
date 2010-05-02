@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions
+
+xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+  xmlns:n="http://www.informatica.com/wsdl/"
+  xmlns:infa="http://www.informatica.com/"
+  targetNamespace="http://www.informatica.com/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <wsdl:types>
+  <xsd:schema targetNamespace="http://www.informatica.com/wsdl/" xmlns="http://www.informatica.com/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:infatype="http://www.informatica.com/types/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/http/"/>
+    <xsd:complexType name="AddressParseResponseType">
+      <xsd:sequence>
+        <xsd:element name="AddressParseResponseElement">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="OUT_ADDR" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:string">
+                    <xsd:maxLength value="10000"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="AddressParseRequest" type="AddressParseRequestType"/>
+
+    <xsd:element name="AddressParseResponse" type="AddressParseResponseType"/>
+
+    <xsd:complexType name="AddressParseRequestType">
+      <xsd:sequence>
+        <xsd:element name="AddressParseRequestElement">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="IN_ADDR" nillable="true" minOccurs="0" maxOccurs="1">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:string">
+                    <xsd:maxLength value="10000"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+
+  </xsd:schema>
+
+  </wsdl:types>
+
+  <wsdl:message name="AddressParseOut">
+    <wsdl:part name="parameters" element="n:AddressParseResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddressParseIn">
+    <wsdl:part name="parameters" element="n:AddressParseRequest" />
+  </wsdl:message>
+
+  <wsdl:portType name="AddressParsePort">
+    <wsdl:operation name="AddressParseOperation">
+      <wsdl:input message="infa:AddressParseIn"/>
+      <wsdl:output message="infa:AddressParseOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="AddressParseBinding" type="infa:AddressParsePort">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="AddressParseOperation">
+      <soap:operation soapAction="" style="document" />
+      <wsdl:input>
+        <soap:body  use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body  use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="AddressParse">
+    <wsdl:port name="AddressParsePort" binding="infa:AddressParseBinding">
+      <soap:address location="http://172.16.5.191:7333/wsh/services/RealTime/AddressParse" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+
