@@ -1,0 +1,16 @@
+#Wed Dec 30 11:42:09 CST 2009
+eclipse.preferences.version=1
+encoding//src/kirk/ws/demo/HelloWorld.java=UTF-8
+encoding//src/kirk/ws/demo/HelloWorldService.java=UTF-8
+encoding//src/kirk/ws/demo/HelloWorldServiceLocator.java=UTF-8
+encoding//src/kirk/ws/demo/HelloWorldSoapBindingStub.java=UTF-8
+encoding//src/kirk/ws/demo/ServiceDemo.java=UTF-8
+encoding//src/kirk/ws/demo/ServiceDemoLocator.java=UTF-8
+encoding//src/kirk/ws/demo/ServiceDemoPortType.java=UTF-8
+encoding//src/kirk/ws/demo/ServiceDemoSoap11BindingStub.java=UTF-8
+encoding//src/kirk/ws/demo/ServiceDemoSoap12BindingStub.java=UTF-8
+encoding//src/kirk/ws/demo/UserService.java=UTF-8
+encoding//src/kirk/ws/demo/UserServiceService.java=UTF-8
+encoding//src/kirk/ws/demo/UserServiceServiceLocator.java=UTF-8
+encoding//src/kirk/ws/demo/UserServiceSoapBindingStub.java=UTF-8
+encoding//src/kirk/ws/demo/bean/UserBean.java=UTF-8
