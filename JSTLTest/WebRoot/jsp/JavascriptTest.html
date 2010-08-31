@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>JavascriptTest.html</title>
+
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="this is my page">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+
+		<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+		<script type="text/javascript">
+			function getRadioValue(radioObj){
+				if(radioObj){
+					if(radioObj instanceof Array){
+						for(var i=0; i<radioObj.length; i++){
+							if(radioObj[i].checked){
+								return radioObj[i].value;
+							}
+						}
+					}else{
+						if(radioObj.checked){
+							return radioObj.value;
+						}
+					}
+				}
+			}
+
+			function test(){
+				alert(getRadioValue(document.getElementsByName('ra')[0]));
+				//alert(getRadioValue(document.form1.ra));
+			}
+			
+			function objTypeCheck(obj, type){
+				if(type != 'array'){
+					// typeof 運算符把類型信息當作字符串返回。typeof 返回值有六種可能：
+					// "number", "string", "boolean", "object", "function", "undefined"
+					return typeof(obj) == type;
+				}else{
+					// instanceof 主要返回的是一個類型:如Bool,Array,Function
+					return obj instanceof Array;
+				}
+			}
+			
+			/**
+			 * 取得Radio的值(jQuery)
+			 **/
+			function getRadioValueJQ(radioName){
+				var radioValue = $('input[name='+radioName+']:checked').val();
+
+				// 下面這個不行，只能抓到第一個Radio的value!
+				//var radioValue = $('input[name='+radioName+'][@checked]').val();
+				
+				if(radioValue){
+					return radioValue;
+				}else{
+					return 'Please select one!';
+				}
+			}
+
+			function getCheckboxValue(ckName, gap){
+				var ckCheckedObj = $('input[name='+ckName+']');
+				var checkboxValue = '';
+				if(ckCheckedObj && gap){
+					ckCheckedObj.attr('checked').each(function(){
+						checkboxValue = checkboxValue + gap
+		            });
+				}
+			}
+
+			/**
+			 * checkbox全選或全不選(jQuery)
+			 **/
+			function checkAllJQ(ckName,flag){
+				var ckObj = $('input[name='+ckName+']');
+				if(ckObj){
+					ckObj.each(function(){
+		                this.checked = flag;
+		                //$(this).attr("checked", false);
+		            });
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<form name="form1">
+			<input type="radio" name="ra" value="1111">1111<br>
+			<input type="radio" name="ra" value="2222">2222<br>
+			<input type="radio" name="ra" value="3333">3333<br>
+			<input type="radio" name="ra" value="4444">4444<br>
+			<input type="button" value="按下去！" onclick="alert(getRadioValueJQ('ra'));"><br>
+			
+			<input type="checkbox" name="cb" value="1111">1111<br>
+			<input type="checkbox" name="cb" value="2222">2222<br>
+			<input type="checkbox" name="cb" value="3333">3333<br>
+			<input type="checkbox" name="cb" value="4444">4444<br>
+			<input type="button" value="按下去！" onclick="alert(getCheckboxValue('cb',','));"><br/>
+			<input type="button" value="全選啦！" onclick="checkAllJQ('cb',true);"><br/>
+			<input type="button" value="不選啦！" onclick="checkAllJQ('cb',false);"><br/>
+		</form>
+		<script type="text/javascript">
+			//alert('true is boolean : '+objTypeCheck(true,'boolean'));
+			//var abc = Array({ID:"abc",Name:"def"});
+			//alert(objTypeCheck(abc, 'array'));
+			//alert(objTypeCheck(document.form1.cb, 'array'));
+			
+			// anyway,使用document.getElementsByName取得的不會是個Array！
+			//alert(document.getElementsByName('ra'));
+			//alert(document.getElementsByName('ra')[0]);
+			
+			//alert($('constructor:'+'radio').constructor);
+			//alert($('prototype:'+'radio').prototype);
+			//alert(abc.constructor == Array);
+			
+			//alert($('input[name=cb]:checked').val());
+		</script>
+	</body>
+</html>
