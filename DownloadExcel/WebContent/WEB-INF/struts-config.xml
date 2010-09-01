@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="dyForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="keyword" type="java.lang.String" />
+			<form-property name="beginDate" type="java.lang.String" />
+			<form-property name="endDate" type="java.lang.String" />
+			<form-property name="publishId" type="java.lang.String" />
+			<form-property name="promotionId" type="java.lang.String" />
+			<form-property name="promotionType" type="java.lang.String" />
+		</form-bean>
+	</form-beans>
+	
+	<action-mappings>
+		<action name="dyForm" path="/download" type="kirk.poi.sample.PoiTestAction"/>
+	</action-mappings>
+	
+</struts-config>
