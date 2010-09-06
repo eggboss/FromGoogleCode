@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,9 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<html:form method="post" action="download.do">
-	<input type="hidden" name="dispatch"/>
-	<input type="submit" value="gogo"/><br>
-</html:form>
+<form name="dyForm" action="downloadExcel.do?method=downloadExcel" method="post">
+	<!--<input type="hidden" name="method" value="downloadExcel"/>-->
+	<input type="hidden" name="downloadFileName" value="excel.xls"/><!-- Required -->
+	
+	<input type="submit" value="Download Excel"/>
+</form>
 </body>
 </html>

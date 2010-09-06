@@ -14,6 +14,9 @@
 	
 	<action-mappings>
 		<action name="dyForm" path="/download" type="kirk.poi.sample.PoiTestAction"/>
+		
+		<action name="dyForm" path="/downloadExcel" type="kirk.sample.struts.download.DownloadExcelTestAction" parameter="method"/>
+		
 	</action-mappings>
 	
 </struts-config>
