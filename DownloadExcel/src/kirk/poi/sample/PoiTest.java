@@ -83,17 +83,65 @@ public class PoiTest {
 		}
 		return is;
 	}
+	
+	public InputStream getAllUserAsExcel2() {
+		// 利用apache的poi包來生成excel文件
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		// 創建一個對應於excel表格中的sheet;
+		HSSFSheet sheet = workbook.createSheet("sheet1");
+		// 創建excel表格中的一行
+		HSSFRow row = sheet.createRow(0);
+		
+		createCell(row, (short)0, "序號");
+		createCell(row, (short)1, "姓");
+		createCell(row, (short)2, "名");
+		createCell(row, (short)3, "年齡");
+		
+		List<User> users = findAllUser();
+		User user = null;
+		for (int i = 0; i < users.size(); i++) {
+			// 對於每一個user
+			user = users.get(i);
+			// 對於每一個user都創建一行
+			row = sheet.createRow(i + 1);
+
+			createCell(row, (short)0, user.getId());
+			createCell(row, (short)1, user.getFirstname());
+			createCell(row, (short)2, user.getLastname());
+			createCell(row, (short)3, user.getId());
+			
+		}
+		
+		// 這個臨時文件將保存在${TOMCAT_HOME}\bin目錄下
+		File tempFile = new File("temp.xls");
+		InputStream is = null;
+		try {
+			OutputStream os = new FileOutputStream(tempFile);
+			workbook.write(os);
+			is = new FileInputStream(tempFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return is;
+	}
+	
+	private HSSFRow createCell(HSSFRow row,short index,String value){
+		HSSFCell cell1 = row.createCell(index);
+		cell1.setEncoding(HSSFCell.ENCODING_UTF_16);
+		cell1.setCellValue(value);
+		return row;
+	}
 
 	private List<User> findAllUser() {
 		List<User> userList = new ArrayList<User>();
 
 		User user1 = new User();
-		user1.setId("11111");
+		user1.setId("1111111111111111");
 		user1.setFirstname("kkkkkkk");
 		user1.setLastname("oooooooo");
 
 		User user2 = new User();
-		user2.setId("222222");
+		user2.setId("22222222222222222222");
 		user2.setFirstname("rrrrrrrrrrr");
 		user2.setLastname("tttttttttttttt");
 

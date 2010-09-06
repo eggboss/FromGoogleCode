@@ -18,7 +18,7 @@ public class PoiTestAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-        InputStream stream = new PoiTest().getAllUserAsExcel();
+        InputStream stream = new PoiTest().getAllUserAsExcel2();
 
         String fileName = "downloadExcelSample.xls";
         try {
