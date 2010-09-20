@@ -10,6 +10,12 @@
    8. 直到安裝完成；
 
 
-
-
+Command：
 java -jar ibator.jar -configfile ibatorConfig.xml -overwrite
+也可以使用ANT
+
+
+一些問題：
+1.Generator出來的DAO無法使用，但generator的xml設定檔裡的daoGenerator標籤不能省！
+2.gen出來的xml裡，有一sql：ibatorgenerated_Example_Where_Clause，會產生錯誤！拿掉就可以使用了。
+===>原來是namespace設定沒有打開，<settings useStatementNamespaces="true" /> 加上即可！！

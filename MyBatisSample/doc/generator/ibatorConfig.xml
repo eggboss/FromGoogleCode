@@ -2,42 +2,38 @@
 <!DOCTYPE ibatorConfiguration
   PUBLIC "-//Apache Software Foundation//DTD Apache iBATIS Ibator Configuration 1.0//EN"
   "http://ibatis.apache.org/dtd/ibator-config_1_0.dtd">
+
 <ibatorConfiguration>
 
-	<!-- properties檔無法載入！放棄！使用ibatorConfig2.xml -->
-	<properties resource="ibatorConfig.properties"/>
-	<!-- <properties url="file://d:/WorkingSpace/workspaces/FET_EBOOKS/MyBatisSample/doc/generator/ibatorConfig.properties"/>-->
-
-
 	<!-- 設定classpath，放入JDBC Driver的path -->
-	<classPathEntry location="${dbDriverPath}" />
+	<classPathEntry location="../../lib/sqljdbc.jar" />
 
 	<ibatorContext id="DBTables" targetRuntime="Ibatis2Java2">
 		<jdbcConnection 
-			driverClass="${driver}"
-			connectionURL="${url}" 
-			userId="${username}" 
-			password="${password}"
+			driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+			connectionURL="jdbc:sqlserver://localhost:1433; DatabaseName=AdventureWorks;" 
+			userId="sa" 
+			password="s1234a"
 		/>
 
 		<javaTypeResolver>
 			<property name="forceBigDecimals" value="false" />
 		</javaTypeResolver>
 
-		<javaModelGenerator targetPackage="test.model" targetProject="${targetProject}">
+		<javaModelGenerator targetPackage="test.generator.model" targetProject="../../src">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
-		<sqlMapGenerator targetPackage="test.xml" targetProject="${targetProject}">
+		<sqlMapGenerator targetPackage="test.generator.xml" targetProject="../../src">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
-
-		<daoGenerator type="SPRING" targetPackage="test.dao" targetProject="${targetProject}">
+ 
+		<daoGenerator type="GENERIC-SI" targetPackage="test.generator.dao" targetProject="../../src">
 			<property name="enableSubPackages" value="true" />
 		</daoGenerator>
-
-		<table schema="Person" tableName="Address" domainObjectName="Customer"/>
+ 
+		<table schema="Person" tableName="Address" domainObjectName="Address"/>
 
 	</ibatorContext>
 </ibatorConfiguration>
