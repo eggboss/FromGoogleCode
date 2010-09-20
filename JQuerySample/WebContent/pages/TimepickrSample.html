@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link rel="Stylesheet" media="screen" href="../js/timepickr/themes/default/ui.core.css" />
+<link rel="Stylesheet" media="screen" href="../js/timepickr/themes/default/ui.timepickr.css" />
+<link rel="Stylesheet" media="screen" href="../css/jquery.timepickr.css" />
+
+<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="../js/timepickr/jquery.timepickr.js"></script>
+
+<title>Insert title here</title>
+<script type="text/javascript">
+<!-- http://code.google.com/p/jquery-utils/wiki/UiTimepickr -->
+$(function(){
+
+    $('#timestart').timepickr({
+        convention: 24,
+        //seconds: true,
+        //format24: "{h:02.d}:{m:02.d}",
+    });
+
+});
+</script>
+</head>
+<body>
+<input name="timestart" id="timestart" size="6" readonly="readonly">
+</body>
+</html>

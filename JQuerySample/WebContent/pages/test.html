@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function checkBeginDate(){
+    var f = document.setPromotionForm;    
+    var DateStamp = new Date();
+    var CurrentDate = DateStamp.getFullYear() + "/" + (DateStamp.getMonth() +1) + "/" + DateStamp.getDate() + " " + DateStamp.getHours() + ":00:00";
+    var yyyy = f.searchStartDate.value.substring(0,4);
+    var mm = f.searchStartDate.value.substring(5,7);
+    var dd = f.searchStartDate.value.substring(8,10);
+    var hh = f.beginTime.value;
+    var beginDate = yyyy+ "/" + mm + "/" +dd + " " + hh + ":00:00";
+    if((Date.parse(beginDate)).valueOf()<=(Date.parse(CurrentDate)).valueOf()){
+       alert("促銷開始日期需大於今天日期，請重新設定!!");
+       f.searchStartDate.value = f.beginDate.value;
+       return false;
+    }
+    return true;
+}  
+function checkEndDate(){
+    var f = document.setPromotionForm;
+    var yyyyF = f.searchStartDate.value.substring(0,4);
+    var mmF = f.searchStartDate.value.substring(5,7);
+    var ddF = f.searchStartDate.value.substring(8,10);
+    var hhF = f.beginTime.value;
+    var yyyyE = f.searchEndDate.value.substring(0,4);
+    var mmE = f.searchEndDate.value.substring(5,7);
+    var ddE = f.searchEndDate.value.substring(8,10);
+    var hhE = f.endTime.value;
+    var d1 = yyyyF+ "/" + mmF + "/" +ddF + " " + hhF + ":00:00";
+    var d2 = yyyyE+ "/" + mmE + "/" +ddE + " " + hhE + ":00:00";
+    if((Date.parse(d2)).valueOf()<=(Date.parse(d1)).valueOf()){
+       alert("促銷結束日期需大於開始日期，請重新設定!!");
+       //f.searchEndDate.value = f.endDate.value;
+       return false;
+    }
+    return true;
+}
+</script>
+</head>
+<body>
+<form name="setPromotionForm">
+	<input type="text" name="searchStartDate" value="2010-09-11">
+	<input type="text" name="beginTime" value="12"><br/>
+	<input type="text" name="searchEndDate" value="2010-09-13">
+	<input type="text" name="endTime" value="08"><br/>
+	<input type="button" value="測試開始日期" onclick="checkBeginDate();"><br/>
+	<input type="button" value="測試結束日期" onclick="checkEndDate();">
+</form>
+</body>
+</html>
