@@ -6,7 +6,8 @@ import java.sql.DriverManager;
 public class SQLServerConnectUtil {
 	public static void main(String[] srg) {
 		String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"; // 加載JDBC驅動
-		String dbURL = "jdbc:sqlserver://localhost:1433; DatabaseName=eggboss;"; // 連接服務器和數據庫sample
+		// 一定得加DatabaseName
+		String dbURL = "jdbc:sqlserver://localhost:1433; DatabaseName=AdventureWorks;"; // 連接服務器和數據庫sample
 		String userName = "sa"; // 默認用戶名
 		String userPwd = "sa"; // 密碼
 		Connection dbConn;
