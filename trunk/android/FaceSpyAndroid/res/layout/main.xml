@@ -3,11 +3,17 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bk005"
     >
-<SurfaceView
-    android:id="@+id/previewsurface" 
-    android:layout_width="192px" android:layout_x="5px" 
-    android:layout_height="175px" android:layout_y="445px"
-    />
+	<TextView 
+		android:id="@+id/tview"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="fill_parent"
+	   	android:background="@drawable/bk005"
+	   	/>
+	<SurfaceView
+	    android:id="@+id/previewsurface" 
+	    android:layout_width="192px" android:layout_x="5px" 
+	    android:layout_height="180px" android:layout_y="469px"
+	    android:layout_weight="1"
+	    />
 </AbsoluteLayout>
