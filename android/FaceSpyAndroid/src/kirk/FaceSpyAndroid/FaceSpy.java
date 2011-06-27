@@ -52,6 +52,8 @@ import android.widget.Toast;
  * ==>fling
  * http://developer.51cto.com/art/201001/181289.htm
  * 
+ * 2011.06 升級2.3後發生不能存檔問題
+ * 最後發現可能是因為 File.separator 的問題，使用“\\”會有問題！！
  * 
  * @author Kirk Hsu
  * @see http://androidbiancheng.blogspot.com/2010/12/androidcamera-preview.html
@@ -69,6 +71,7 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 	private AudioManager audioManager;
 	private int maxZoom = 0;
 	private Parameters parameters;
+	private String saveDir = "FaceSpy";
 	
 //	private static final int SWIPE_MIN_DISTANCE = 120;   
 //	private static final int SWIPE_MAX_OFF_PATH = 250;   
@@ -103,10 +106,17 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 		
 		// 設定圖壓儲存路徑
 		SDPath = Environment.getExternalStorageDirectory().toString();
-		File targetFolder = new File(SDPath + "\\FaceSpy\\");
-		if(!targetFolder.exists()){
-			targetFolder.mkdir();
-			targetFolder = null;
+		try{
+			File targetFolder = new File(SDPath + File.separator + saveDir + File.separator);
+			if(!targetFolder.exists()){
+				Log.i(TAG, "Create DIR :" + targetFolder.getAbsolutePath());
+				targetFolder.mkdir();
+				targetFolder = null;
+			}else{
+				Log.i(TAG, "Exist : " + targetFolder.getAbsolutePath());
+			}
+		}catch(Exception e){
+			Log.e(TAG, e.getMessage());
 		}
 		
 		getWindow().setFormat(PixelFormat.UNKNOWN);
@@ -330,12 +340,16 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 		
 		FileOutputStream out = null;
 		try {
-			out = new FileOutputStream(SDPath + "\\FaceSpy\\" + barcodeNumber + ".JPG");
+			String imgPath = SDPath + File.separator + saveDir + File.separator + barcodeNumber + ".JPG";
+			//Log.i(TAG, "Img Path=" + imgPath);
+			//Log.i(TAG, "getFilesDir=" + getFilesDir());
+			out = new FileOutputStream(imgPath);
 			bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			
 			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.e(TAG, "Save Image Error!! Error Message: " + e.getMessage());
 		}
 		
 		Toast.makeText(this, barcodeNumber + ".JPG Saved.", Toast.LENGTH_SHORT).show();
