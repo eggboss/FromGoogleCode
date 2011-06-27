@@ -26,6 +26,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 /**
@@ -71,7 +72,7 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 	private AudioManager audioManager;
 	private int maxZoom = 0;
 	private Parameters parameters;
-	private String saveDir = "FaceSpy";
+	private String saveDir = "FaceSpy2";
 	
 //	private static final int SWIPE_MIN_DISTANCE = 120;   
 //	private static final int SWIPE_MAX_OFF_PATH = 250;   
@@ -96,6 +97,9 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 //		Notification notification = new Notification();
 //		notification.defaults=Notification.DEFAULT_VIBRATE;
 //		mNotificationManager.notify(0,notification);
+		
+		View view=(View)findViewById(R.id.tview);
+		view.getBackground().setAlpha(225);//0-255透明度
 		
 		// 設定拍照聲音
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
