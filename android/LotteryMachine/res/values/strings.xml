@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, LotteryMachineActivity!</string>
+    <string name="app_name">LotteryMachine</string>
+    <string name="btn_insert">insert</string>
+    <string name="btn_delete">delete</string>
+    <string name="btn_query">query</string>
+    <string name="btn_delete_all">DeleteAll</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TextView android:layout_width="match_parent" android:id="@+id/textView1"
+		android:layout_height="wrap_content" android:text="Test SQLite"></TextView>
+	<Button android:id="@+id/insert" android:layout_width="match_parent"
+		android:text="@string/btn_insert" android:layout_height="wrap_content"></Button>
+	<Spinner android:layout_height="wrap_content" android:id="@+id/spinner1" android:layout_width="match_parent"></Spinner>
+	<Button android:id="@+id/query" android:layout_width="match_parent"
+		android:text="@string/btn_query" android:layout_height="wrap_content"></Button>
+	<Button android:layout_height="wrap_content" android:text="@string/btn_delete_all"
+		android:id="@+id/btn_deleteall" android:layout_width="match_parent"></Button>
+	<TextView android:layout_width="match_parent" android:id="@+id/resultTextView"
+		android:text="TextView" android:layout_height="wrap_content"></TextView>
+	
+</LinearLayout>
