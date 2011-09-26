@@ -45,7 +45,7 @@ public class DataBaseTableToExcel{
 	 *
 	 * @param fileName
 	 */
-	public void createOneFile(String fileName) {
+	public void createOneFile(String outputPath, String fileName) {
 		Statement stmt = null;
 		ResultSet set = null;
 		PreparedStatement pstmt = null;
@@ -101,6 +101,12 @@ public class DataBaseTableToExcel{
 		    data_style.setFillForegroundColor(HSSFColor.LIGHT_ORANGE.index);
 		    data_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 		    
+		    HSSFCellStyle data_number_style = wb.createCellStyle();
+//		    data_number_style.setDataFormat(HSSFDataFormat.getBuiltinFormat( "###,#" ));
+		    data_number_style.setFillForegroundColor(HSSFColor.LIGHT_ORANGE.index);
+		    data_number_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+//		    data_number_style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		    
 		    HSSFCellStyle data_style_center = wb.createCellStyle();
 		    data_style_center.setFillForegroundColor(HSSFColor.LIGHT_ORANGE.index);
 		    data_style_center.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -110,6 +116,11 @@ public class DataBaseTableToExcel{
 		    pk_style.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
 		    pk_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 		    
+		    HSSFCellStyle pk_number_style = wb.createCellStyle();
+		    pk_number_style.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
+		    pk_number_style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		    pk_number_style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
+		    
 		    // Title style
 		    HSSFCellStyle title_style = wb.createCellStyle();
 //		    titleStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -118,6 +129,7 @@ public class DataBaseTableToExcel{
 		    
 		    setBorderToStyle1(header_style);
 			setBorderToStyle1(data_style);
+			setBorderToStyle1(data_number_style);
 			setBorderToStyle1(data_style_center);
 			setBorderToStyle1(pk_style);
 			
@@ -160,12 +172,14 @@ public class DataBaseTableToExcel{
 				
 				List pkList = getPKList(name);
 				
+				// 取得table的info及comments
 				sql = new StringBuffer();
-				sql.append("select t.table_name,t.column_name,t.data_type,t.nullable,c.comments ")
-					.append("from user_tab_cols t, user_col_comments c ")
-					.append("where t.table_name=c.table_name ").append(
-							"and t.column_name=c.column_name ").append(
-							"and t.table_name= ? order by t.column_id ");
+				sql.append("select t.table_name,t.column_name,t.data_type,t.data_length,t.nullable,c.comments ")
+				   .append("from user_tab_cols t, user_col_comments c ")
+				   .append("where t.table_name=c.table_name ")
+				   .append("and t.column_name=c.column_name ")
+				   .append("and t.table_name= ? order by t.column_id ");
+				
 				pstmt = conn.prepareStatement(sql.toString());
 				pstmt.setString(1, name);
 				set = pstmt.executeQuery();
@@ -200,11 +214,16 @@ public class DataBaseTableToExcel{
 				cell.setCellStyle(header_style);
 				
 				cell = row.createCell(2);
+				HSSFRichTextString dataLength = new HSSFRichTextString("欄位長度");
+				cell.setCellValue(dataLength);
+				cell.setCellStyle(header_style);
+				
+				cell = row.createCell(3);
 				HSSFRichTextString nullable = new HSSFRichTextString("NULLABLE");
 				cell.setCellValue(nullable);
 				cell.setCellStyle(header_style);
 				
-				cell = row.createCell(3);
+				cell = row.createCell(4);
 				HSSFRichTextString comment = new HSSFRichTextString("註解");
 				cell.setCellValue(comment);
 				cell.setCellStyle(header_style);
@@ -219,6 +238,7 @@ public class DataBaseTableToExcel{
 				while (set.next()) {
 					String columnNameString = set.getString("COLUMN_NAME");
 					String dataTypeString = set.getString("DATA_TYPE");
+					String dataLengthString = set.getString("DATA_LENGTH");
 					String nullableString = set.getString("NULLABLE");
 					String commentString = set.getString("COMMENTS");
 					
@@ -255,6 +275,17 @@ public class DataBaseTableToExcel{
 					}
 					
 					cell = row.createCell(2);
+//					HSSFRichTextString _dataLength = new HSSFRichTextString(dataLengthString);
+//					cell.setCellValue(_dataLength);
+					cell.setCellValue(Long.parseLong(dataLengthString));
+//					cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+					if(isPK){
+						cell.setCellStyle(pk_number_style);
+					}else{
+						cell.setCellStyle(data_number_style);
+					}
+					
+					cell = row.createCell(3);
 					if("N".equals(nullableString)){
 						nullableString = "";
 					}
@@ -266,7 +297,7 @@ public class DataBaseTableToExcel{
 						cell.setCellStyle(data_style_center);
 					}
 					
-					cell = row.createCell(3);
+					cell = row.createCell(4);
 					HSSFRichTextString _comment = new HSSFRichTextString(commentString);
 					cell.setCellValue(_comment);
 					if(isPK){
@@ -290,14 +321,16 @@ public class DataBaseTableToExcel{
 				
 				sheet.setColumnWidth(0, ONE_WORD_WIDTH*(cSize0*3/4));
 				sheet.setColumnWidth(1, ONE_WORD_WIDTH*7);
-				sheet.setColumnWidth(2, ONE_WORD_WIDTH*5);
-				sheet.setColumnWidth(3, ONE_WORD_WIDTH*cSize3);
+				sheet.setColumnWidth(2, ONE_WORD_WIDTH*5); // data_length
+				sheet.setColumnWidth(3, ONE_WORD_WIDTH*5);
+				sheet.setColumnWidth(4, ONE_WORD_WIDTH*cSize3);
 				
 				set.close();
 				pstmt.close();
 			}
 			
-			FileOutputStream fileOut = new FileOutputStream("D:/"+fileName+"-"+getDatePrefix()+".xls");
+//			FileOutputStream fileOut = new FileOutputStream("D:/"+fileName+"-"+getDatePrefix()+".xls");
+			FileOutputStream fileOut = new FileOutputStream(outputPath+fileName+"-"+getDatePrefix()+".xls");
 			wb.write(fileOut);
 			fileOut.close();
 			
@@ -610,9 +643,10 @@ public class DataBaseTableToExcel{
 //		cei.setOracleConnection("localhost", "1521", "tmtrmst", "RMS", "RMS123");
 //		cei.createOneFile("TAIKOO_TABLES");
 		
-		cei.setOracleConnection("172.30.12.223", "1521", "CMSDB", "ecuser1", "twm0919");
+//		cei.setOracleConnection("172.30.12.223", "1521", "CMSDB", "ecuser1", "twm0919");
 //		cei.setOracleConnection("172.30.12.223", "1521", "CMSDBS", "ap_ecuser", "twmec2ap");
-		cei.createOneFile("TCC_EC_TABLES");
+		cei.setOracleConnection("10.76.134.3", "1533", "APPSS", "ebookstg", "ebookstg123");
+		cei.createOneFile("D:/", "FET_EBOOK_TABLES");
 		
 		
 	}
