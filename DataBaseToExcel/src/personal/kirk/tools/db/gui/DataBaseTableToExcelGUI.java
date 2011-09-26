@@ -245,7 +245,7 @@ public class DataBaseTableToExcelGUI extends JFrame {
 	private void jButton0MouseMouseClicked(MouseEvent event) {
 		this.dbToExcel.setOracleConnection(getJTextField0().getText(), getJTextField5().getText(), 
 				getJTextField1().getText(), getJTextField2().getText(), getJTextField3().getText());
-		this.dbToExcel.createOneFile(getJTextField4().getText()+"\\", getJTextField6().getText());
+		this.dbToExcel.createOneFile(getJTextField4().getText() + File.separatorChar, getJTextField6().getText());
 	}
 
 	private void jButton1MouseMouseClicked(MouseEvent event) {
