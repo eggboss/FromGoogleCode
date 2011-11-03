@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JQuery - CheckBox</title>
+<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+</head>
+<body>
+<input type="checkbox" name="ck" value="ck001">ck001<br>
+<input type="checkbox" name="ck" value="ck002" checked>ck002<br>
+<input type="checkbox" name="ck" value="ck003">ck003<br>
+<input type="checkbox" name="ck" value="ck004">ck004<br>
+<p>
+	1. 取得checkbox中被checked項目的value：<br>
+	<b>input[type=checkbox]:checked</b><br>
+	<b>input[type=checkbox][name=ck]:checked</b><br>
+	<font size="1" color="blue">(綁兩個屬性，第二個綁住名字為ck的checkbox)</font>
+	<input type="button" name="test" value="test" onclick="test1()"><br>
+	<span id="area1"></span>
+	<script type="text/javascript">
+		function test1(){
+			$('#area1').html('');
+			$('input[type=checkbox][name=ck]:checked').each(function(index){
+				$('#area1').append((index+1)+'. '+this.value+'<br>'); // 這裡用this.val()是不對的！
+				//$('#area1').append((index+1)+'. '+$(this).val()+'<br>'); // 要就用$(this).val()才對的！
+			});
+		}
+	</script>
+<p>
+<p>
+	2. 取得checkbox中被checked項目的value(使用自訂過濾器)：<br>
+	<b>:checkbox:checked</b><br>
+	<b>:checkbox[name=ck]:checked</b><br>
+	<input type="button" name="test" value="test" onclick="test2()"><br>
+	<span id="area2"></span>
+	<script type="text/javascript">
+		function test2(){
+			$('#area2').html('');
+			$(':checkbox[name=ck]:checked').each(function(index){
+				$('#area2').append((index+1)+'. '+$(this).val()+'<br>');
+			});
+		}
+	</script>
+<p>
+<p>
+	3. 取得checkbox中<b>沒</b>被checked項目的value：<br>
+	<b>input:checkbox:not(:checked)</b><br>
+	<b>input:checkbox[name=ck]:not(:checked)</b><br>
+	<input type="button" name="test" value="test" onclick="test3()"><br>
+	<span id="area3"></span>
+	<script type="text/javascript">
+		function test3(){
+			$('#area3').html('');
+			$('input:checkbox[name=ck]:not(:checked)').each(function(index){
+				$('#area3').append((index+1)+'. '+$(this).val()+'<br>');
+			});
+		}
+	</script>
+<p>
+
+<hr>
+<p>互斥(選了ALL其他的Checkbox就會被取消；相反，選了ALL以外的選項，ALL就會被取消)：</p>
+<input type="checkbox" name="cka" value="ALL" onclick="test4(this)">ALL<br>
+<input type="checkbox" name="cka" value="CONDITION1" onclick="test4(this)">CONDITION1<br>
+<input type="checkbox" name="cka" value="CONDITION2" onclick="test4(this)">CONDITION2<br>
+<input type="checkbox" name="cka" value="CONDITION3" onclick="test4(this)">CONDITION3<br>
+<p>
+<b>:checkbox[name=cka][value=ALL]</b><br>
+<font size="1" color="blue">取得value是ALL的checkbox</font><br>
+<b>:checkbox[name=cka][value!=ALL]</b><br>
+<b>:checkbox[name=cka]:not([value=ALL])</b><br>
+<font size="1" color="blue">取得value不是ALL的checkbox，注意：用:not[value=ALL]不行！:not([value=ALL])這才是對的！</font><br>
+取消CheckBox的選取用<b>attr('checked', '')</b><br>
+</p>
+<script type="text/javascript">
+	function test4(srcObj){
+		if($(srcObj).attr('checked')){
+			if($(srcObj).val()=='ALL'){
+				//$(':checkbox[name=cka][value!=ALL]').each(function(index){
+				$(':checkbox[name=cka]:not([value=ALL])').each(function(index){
+					$(this).attr('checked', '');
+				})
+			}else{
+				$(':checkbox[name=cka][value=ALL]').attr('checked', '');
+			}
+		}
+	}
+</script>
+
+<hr>
+<p>返回(改變選取時會出現Confirm，確定後才會變更，否則會返回原選取)：</p>
+<input type="radio" name="rad" value="VALUE_1" onchange="test5(this)" checked>VALUE_1<br>
+<input type="radio" name="rad" value="VALUE_2" onchange="test5(this)">VALUE_2<br>
+<input type="radio" name="rad" value="VALUE_3" onchange="test5(this)">VALUE_3<br>
+<input type="radio" name="rad" value="VALUE_4" onchange="test5(this)">VALUE_4<br>
+<p>
+<b>'input[type=radio][name=rad][value=' + oldValue + ']'</b><br>
+<font size="1" color="blue">選擇器也可以用字串相加的方式組成</font><br>
+</p>
+<script type="text/javascript">
+	$('input[type=radio][name=rad]').each(function(index){
+		// 將每一個radio都加一個oldValue的屬性來記錄前一個
+		$(this).attr('oldValue', $('input[type=radio][name=rad]:checked').val());
+	});
+	function test5(srcObj){
+		if(confirm('OK？')){
+			$('input[type=radio][name=rad]').each(function(index){
+				$(this).attr('oldValue', $(srcObj).val());
+			});
+		}else{
+			$(srcObj).attr('checked', '');
+			var oldValue = $(srcObj).attr('oldValue');
+			// 選擇器也可以用字串相加的方式組成
+			$('input[type=radio][name=rad][value=' + oldValue + ']').attr('checked', 'checked');
+		}
+	}
+</script>
+</body>
+</html>
