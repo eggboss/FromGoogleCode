@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<!-- 
+1.有播放控制器
+==>Media
+==>play mp3
+http://www.joeldare.com/wiki/play_an_mp3_audio_stream_in_phonegap
+http://stackoverflow.com/questions/4159117/how-to-play-song-in-android-phonegap
+http://stackoverflow.com/questions/5468769/play-multiple-mp3-files-with-phonegap-for-android
+
+
+2.專輯封面(底圖)
+
+3.status bar
+
+4.維護一個播放列清單
+==>file system
+==>database
+
+
+
+未來：
+a.歌詞顯示及儲存
+=================================================
+docs：
+http://jquerymobile.com/demos/1.0rc2/
+http://docs.phonegap.com/en/1.2.0/
+
+jquery namespace
+http://plugins.jquery.com/project/jQueryNameSpace
+ -->
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, height=device-height" />
+	<meta http-equiv="Content-Type" content="text/html; Charset=UTF-8" />
+
+	<title>MyMusicPlayer</title>
+	
+	<!-- PhoneGap -->
+	<script type="text/javascript" charset="utf-8" src="js/phoneGap/phonegap-1.2.0.js"></script>
+	
+	<!-- jQuery Mobile -->
+	<link type="text/css" rel="stylesheet" href="js/jqueryMobile/jquery.mobile-1.0rc2.css"/>
+	<script type="text/javascript" charset="utf-8" src="js/jqueryMobile/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/jqueryMobile/jquery.mobile-1.0rc2.js"></script>
+	
+	<!-- Custom -->
+	<script type="text/javascript" charset="utf-8" src="js/custom/FileOperator.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/custom/MediaOperator.js"></script>
+	
+	<!-- plugin -->
+	<script type="text/javascript" charset="utf-8" src="js/phoneGap/plugin/FileSelectorPlugin.js"></script>
+	
+	<script>
+	//---function for media------------------------------------------------------------------------
+		MediaOperator.setPlaySuccessCallBack(function(){
+			alert('success!');
+		});
+	
+	//---fonction for directory---------------------------------------------------------------------
+		function printResult(fileInfo) {
+			var innerHtmlText = getHtml(fileInfo);
+			$('#testArea').html(innerHtmlText);
+			$("#testArea").listview('refresh');
+			//$("#dirArea").listview('refresh');
+		}
+	
+		function getHtml(fileInfo) {
+			var htmlText = "<li><a href=\"javascript:getFileDirectory('up','"+fileInfo.path+"',false)\">"+fileInfo.filename + "</a></li>";// + "<ul id=\"dirArea\" data-role=\"listview\" data-theme=\"g\">";
+			if (fileInfo.children) {
+				//alert(fileInfo.children.length);
+				for ( var index = 0; index < fileInfo.children.length; index++) {
+					if(fileInfo.children[index].isdir){
+						var ahref = fileInfo.children[index].path;
+						var liString = "<li><a href=\"javascript:getFileDirectory('list','"+ahref+"',false)\">"+"----"+fileInfo.children[index].filename+"</a></li>";
+						htmlText = htmlText + liString;
+					}else{
+						var filename = fileInfo.children[index].filename;
+						var extName = (filename.length>3)?filename.substring(filename.length-3,filename.length):'';
+						JsBridge.log(extName);
+						
+						if("mp3"==extName){
+							var oPath = fileInfo.children[index].path
+							var audioPath = oPath.substring(oPath.indexOf('sdcard')+6,oPath.length);
+							JsBridge.log(audioPath);
+							
+							JsBridge.log("<li><a href=\"javascript:play('"+fileInfo.children[index].path+"')\">"+"----"+fileInfo.children[index].filename+"</a></li>");
+							htmlText += "<li><a href=\"javascript:MediaOperator.play('"+audioPath+"')\">"+"----"+fileInfo.children[index].filename+"</a></li>";
+						}else{
+							htmlText += "<li>----"+fileInfo.children[index].filename+"</li>";
+						}
+					}
+				}
+			}
+			htmlText = htmlText;// + "</ul>";
+			return htmlText;
+		}
+		
+		function getFileDirectory(action, path,isFirst){
+			window.plugins.FileSelector.list(
+				action,
+				{
+					"isFirst":isFirst,
+					"path":path
+				},
+	    		function(r){printResult(r)},
+	    		function(e){JsBridge.log(e)}
+	    	);
+		}
+		
+		function showFileSelector(){
+			getFileDirectory("list",null,true);
+			$.mobile.changePage("#fileSelector", { transition: "slideup"} );
+		}
+		
+		$().ready(function(){
+			//$('#testButton').click(function(){
+				//getFileDirectory("list",null,true); // 預設帶sdcard的路徑
+		    //});
+		   
+		});
+	</script>
+</head>
+<body><!-- data-cache="never"  -->
+	<div data-role="page" data-theme="b" id="main">
+		<header data-role="header" id="header" data-theme="b" data-position="fixed">
+			Music Player
+		</header>
+		<div data-role="content" class="content">
+			<div data-role="controlgroup" data-type="horizontal" valign="bottom">
+				<a href="index.html" data-role="button">前一首</a>
+				<a href="javascript:MediaOperator.play()" data-role="button">開始</a>
+				<a href="index.html" data-role="button">下一首</a>
+			</div>
+			<div data-role="controlgroup" data-type="horizontal" valign="bottom">
+				<a href="javascript:MediaOperator.stop()" data-role="button">停止</a>
+				<a href="javascript:MediaOperator.pause()" data-role="button">暫停</a>
+			</div>
+			<div id="coverArea">專輯畫面</div>
+		</div>
+		<!-- 
+			這裡使用class="ui-bar"會使footer超出device的寬度
+			換成用&nbsp;來調整
+		 -->
+		<foote data-role="footer" id="controller" data-theme="b" data-position="fixed">
+			<div data-role="controlgroup" data-type="horizontal">
+				&nbsp;&nbsp;
+				<a href="index.html" data-role="button">播放列表</a>
+				<a href="javascript:showFileSelector()" data-role="button" data-icon="plus" data-rel="dialog">新增歌曲</a>
+			</div>
+		</foote>
+	</div>
+	
+	<div data-role="page" data-theme="b" id="fileSelector">
+		<header data-role="header" id="header" data-theme="b" data-position="fixed">
+			新增歌曲
+		</header>
+		<div data-role="content">
+			<ul data-role="listview" data-theme="b" id="testArea"></ul>
+		</div>
+		<foote data-role="footer" id="controller" data-theme="b" data-position="fixed">
+			<div data-role="controlgroup" data-type="horizontal">
+				&nbsp;&nbsp;
+				<a href="index.html" data-role="button">回上頁</a>
+				<a href="index.html" data-role="button">確定</a>
+			</div>
+		</foote>
+	</div>
+</body>
+</html>
