@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, height=device-height" />
+	<meta http-equiv="Content-Type" content="text/html; Charset=UTF-8" />
+	<title>File Selector</title>
+	
+	<script type="text/javascript" charset="utf-8" src="js/phoneGap/phonegap-1.2.0.js"></script>
+	
+	<!-- jQuery Mobile -->
+	<link type="text/css" rel="stylesheet" href="js/jqueryMobile/jquery.mobile-1.0rc2.min.css"/>
+	<script type="text/javascript" charset="utf-8" src="js/jqueryMobile/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/jqueryMobile/jquery.mobile-1.0rc2.min.js"></script>
+	
+	<!-- Custom -->
+	<script type="text/javascript" charset="utf-8" src="js/custom/FileOperator.js"></script>
+	
+	<!-- plugin -->
+	<script type="text/javascript" charset="utf-8" src="js/phoneGap/plugin/FileSelectorPlugin.js"></script>
+	
+	<script>
+		function printResult(fileInfo) {
+			var innerHtmlText = getHtml(fileInfo);
+			$('#testArea').html(innerHtmlText);
+			$("#testArea").listview('refresh');
+			//$("#dirArea").listview('refresh');
+		}
+	
+		function getHtml(fileInfo) {
+			var htmlText = "<li><a href=\"javascript:getFileDirectory('up','"+fileInfo.path+"',false)\">"+fileInfo.filename + "</a></li>";// + "<ul id=\"dirArea\" data-role=\"listview\" data-theme=\"g\">";
+			if (fileInfo.children) {
+				//alert(fileInfo.children.length);
+				for ( var index = 0; index < fileInfo.children.length; index++) {
+					var ahref = fileInfo.children[index].path;
+					var liString = "<li><a href=\"javascript:getFileDirectory('list','"+ahref+"',false)\">"+"----"+fileInfo.children[index].filename+"</a></li>";
+					htmlText = htmlText + liString;
+				}
+			}
+			htmlText = htmlText;// + "</ul>";
+			return htmlText;
+		}
+		
+		function getFileDirectory(action, path,isFirst){
+			alert(456);
+			window.plugins.FileSelector.list(
+				action,
+				{
+					"isFirst":isFirst,
+					"path":path
+				},
+	    		function(r){printResult(r)},
+	    		function(e){JsBridge.log(e)}
+	    	);
+			alert(789);
+		}
+		
+		$().ready(function(){
+			alert(123);
+			getFileDirectory("list",null,true); // 預設帶sdcard的路徑
+		});
+	</script>
+</head>
+<body>
+<section data-role="page" data-cache="never" data-theme="b">
+	<div data-role="content">
+		<ul data-role="listview" data-theme="b" id="testArea"></ul>
+	</div>
+</section>
+</body>
+</html>
