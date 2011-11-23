@@ -44,7 +44,7 @@ http://plugins.jquery.com/project/jQueryNameSpace
 	<script type="text/javascript" charset="utf-8" src="js/jqueryMobile/jquery.mobile-1.0rc2.js"></script>
 	
 	<!-- Custom -->
-	<script type="text/javascript" charset="utf-8" src="js/custom/FileOperator.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/custom/FIleOperator.js"></script>
 	<script type="text/javascript" charset="utf-8" src="js/custom/MediaOperator.js"></script>
 	
 	<!-- plugin -->
@@ -52,9 +52,25 @@ http://plugins.jquery.com/project/jQueryNameSpace
 	
 	<script>
 	//---function for media------------------------------------------------------------------------
+//-----------lyrics-------------------------------------------------------------------------
+	
+	
+//-----------lyrics-------------------------------------------------------------------------	
+	
 		MediaOperator.setPlaySuccessCallBack(function(){
-			alert('success!');
+			//alert('success!');
+			// 停止時才會觸發
 		});
+	
+	/*
+		document.addEventListener("deviceready", function(){
+			//var ytplayer = document.getElementById("mytplayer");
+			playLyric(function(){
+			    //return ytplayer.getCurrentTime() * 1000; //ms
+			    return MediaOperator.mediaTimer * 1000;
+			},null,'lyrics');
+		}, false);
+	*/
 	
 	//---fonction for directory---------------------------------------------------------------------
 		function printResult(fileInfo) {
@@ -76,14 +92,14 @@ http://plugins.jquery.com/project/jQueryNameSpace
 					}else{
 						var filename = fileInfo.children[index].filename;
 						var extName = (filename.length>3)?filename.substring(filename.length-3,filename.length):'';
-						JsBridge.log(extName);
+						//JsBridge.log(extName);
 						
 						if("mp3"==extName){
 							var oPath = fileInfo.children[index].path
 							var audioPath = oPath.substring(oPath.indexOf('sdcard')+6,oPath.length);
-							JsBridge.log(audioPath);
+							//JsBridge.log(audioPath);
 							
-							JsBridge.log("<li><a href=\"javascript:play('"+fileInfo.children[index].path+"')\">"+"----"+fileInfo.children[index].filename+"</a></li>");
+							//JsBridge.log("<li><a href=\"javascript:play('"+fileInfo.children[index].path+"')\">"+"----"+fileInfo.children[index].filename+"</a></li>");
 							htmlText += "<li><a href=\"javascript:MediaOperator.play('"+audioPath+"')\">"+"----"+fileInfo.children[index].filename+"</a></li>";
 						}else{
 							htmlText += "<li>----"+fileInfo.children[index].filename+"</li>";
@@ -109,7 +125,7 @@ http://plugins.jquery.com/project/jQueryNameSpace
 		
 		function showFileSelector(){
 			getFileDirectory("list",null,true);
-			$.mobile.changePage("#fileSelector", { transition: "slideup"} );
+			$.mobile.changePage("#fileSelector", "fade" );
 		}
 		
 		$().ready(function(){
@@ -119,6 +135,39 @@ http://plugins.jquery.com/project/jQueryNameSpace
 		   
 		});
 	</script>
+	<style type="text/css">
+	/*
+	#lyrics{
+		height: 50px;
+	}
+	
+	#view{
+	    position:relative;
+	}
+	
+	#bgword,#foreword{
+	    position:absolute; 
+	}
+	
+	#bgword{
+	    background:orange;  
+	    color:green;
+	    width:300px;
+	    text-align:center;
+	}
+	
+	#foreword{
+	    color:red;
+	    overflow:hidden;
+	    width:0px;
+	}
+	#forewrodTxt{
+	    text-align:center;    
+	    width:300px;
+	    display:block;
+	    overflow:hidden;
+	}*/
+	</style>
 </head>
 <body><!-- data-cache="never"  -->
 	<div data-role="page" data-theme="b" id="main">
@@ -137,6 +186,73 @@ http://plugins.jquery.com/project/jQueryNameSpace
 			</div>
 			<div id="coverArea">專輯畫面</div>
 		</div>
+
+<div data-role="fieldcontain">
+<label for="lyrics">歌詞:</label>
+<textarea id="lyrics" name="lyrics" cols="80" rows="5" style="display:none">
+[00:01.16]未填詞
+[00:04.28]鄧福如
+[00:10.93].......
+[00:16.34]........
+[00:19.33]雙聲道掛在我耳邊演奏
+[00:23.81]起伏我的感受
+[00:28.08]膠卷轉動濃縮世界鏡頭
+[00:32.54]記錄我的生活
+[00:35.30]
+[00:35.79]獨自 一人的Sofa
+[00:38.28]煩惱變得So Far
+[00:40.61]穿越時空華麗真假
+[00:44.36]這一刻 巴黎的鐵塔
+[00:47.12]忽然埃及腳下
+[00:49.14]釋放我最偉大的想像 Oh~
+[00:54.05]
+[00:54.45]I just want to go 飛到下個綠洲
+[00:59.13]I don't want to follow 在遺忘後
+[01:03.42]I just want to go 飛到下個宇宙
+[01:07.75]I don't want to follow 勇敢的過
+[01:12.24]I feel good I felt myself
+[01:22.25]I feel good I felt myself
+[01:31.15]
+[01:31.53]黑白鍵帶著我指尖遨遊
+[01:35.81]劃上一道彩虹
+[01:40.20]節奏穿梭拉近世界角落
+[01:44.63]凝聚天馬行空
+[01:47.12]
+[01:47.77]獨自 哼唱著So~Fa~
+[01:50.33]煩惱變得So Far
+[01:52.49]霓虹燈綵色了心牆
+[01:56.21]這一刻 希臘的神話
+[01:59.13]忽然變雅典
+[02:01.34]那就儘管飛吧沒有時差 Oh~
+[02:07.77]
+[02:08.04]I feel good I felt myself
+[02:16.83]I feel good I felt myself
+[02:28.31]
+[02:41.29]I just want to go 飛到下個綠洲
+[02:45.97]I don't want to follow 在遺忘後
+[02:50.30]I just want to go 飛到下個宇宙
+[02:54.62]I don't want to follow 勇敢的過
+[02:59.19]I feel good I felt myself
+[03:09.30]I feel good I felt myself
+[03:18.85]
+[03:45.58]END    
+</textarea>
+
+<!-- <div id="view" >
+    <div id="bgword">
+    	currentItem
+    </div>
+    <div id="foreword">
+        <span id="forewrodTxt">
+        	forewrodTxt
+        </span>
+    </div>    
+</div> -->
+<div id="lyricArea">
+	<h2 id="lyric"></h2>
+</div>
+<p id="audio_position"></p>
+			</div>
 		<!-- 
 			這裡使用class="ui-bar"會使footer超出device的寬度
 			換成用&nbsp;來調整
@@ -160,7 +276,7 @@ http://plugins.jquery.com/project/jQueryNameSpace
 		<foote data-role="footer" id="controller" data-theme="b" data-position="fixed">
 			<div data-role="controlgroup" data-type="horizontal">
 				&nbsp;&nbsp;
-				<a href="index.html" data-role="button">回上頁</a>
+				<a href="#main" data-role="button" data-transition="flip" data-direction="reverse">回上頁</a>
 				<a href="index.html" data-role="button">確定</a>
 			</div>
 		</foote>
