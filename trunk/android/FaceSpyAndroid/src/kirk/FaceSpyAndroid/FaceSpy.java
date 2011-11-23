@@ -8,7 +8,6 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
@@ -28,6 +27,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 /**
  * FaceSpy Android版
@@ -56,6 +57,11 @@ import android.widget.Toast;
  * 2011.06 升級2.3後發生不能存檔問題
  * 最後發現可能是因為 File.separator 的問題，使用“\\”會有問題！！
  * 
+ * 	<!-- <SeekBar android:id="@+id/zoomRate"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"/>
+	-->
+ * 
  * @author Kirk Hsu
  * @see http://androidbiancheng.blogspot.com/2010/12/androidcamera-preview.html
  * @see http://androidbiancheng.blogspot.com/2010/12/androidcameratakepicture.html
@@ -72,7 +78,9 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 	private AudioManager audioManager;
 	private int maxZoom = 0;
 	private Parameters parameters;
-	private String saveDir = "FaceSpy2";
+	private String saveDir = "";
+	
+	private SeekBar seekBar = null;
 	
 //	private static final int SWIPE_MIN_DISTANCE = 120;   
 //	private static final int SWIPE_MAX_OFF_PATH = 250;   
@@ -91,15 +99,20 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 		
 		// http://www.hlovey.cn/2009/09/10/android-screen-longitudinal-horizontal.html
 		// 設死程式為直的！
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+//		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
 		
 //		NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 //		Notification notification = new Notification();
 //		notification.defaults=Notification.DEFAULT_VIBRATE;
 //		mNotificationManager.notify(0,notification);
 		
+		saveDir = getString(R.string.save_dir);
+		Log.i(TAG, "saveDir=" + saveDir);
+		
+		int alpha = Integer.parseInt(getString(R.string.alpha_value));
+		Log.i(TAG, "alpha=" + alpha);
 		View view=(View)findViewById(R.id.tview);
-		view.getBackground().setAlpha(225);//0-255透明度
+		view.getBackground().setAlpha(alpha);//0-255透明度
 		
 		// 設定拍照聲音
 		audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
@@ -131,7 +144,47 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 		// 設定Touch Event(螢幕點擊或滑動)
 		bundleMultiTouchEvent();
 		
+		
 	}
+	
+/*
+	private void bundleSeekBar(){
+		// SeekBar
+		seekBar = (SeekBar)findViewById(R.id.zoomRate);
+		seekBar.setMax(parameters.getMaxZoom());
+		seekBar.setKeyProgressIncrement(1);
+		seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				Log.i(TAG, "progress=" + progress);
+				// TODO Auto-generated method stub
+				if(progress >= 1){
+					if(parameters.isSmoothZoomSupported()){
+						myCamera.startSmoothZoom(progress);
+						Log.d(TAG, "StartSmoothZoom !");
+					}else{
+						parameters.setZoom(progress);
+						myCamera.setParameters(parameters);
+						Log.d(TAG, "Set Zoom !");
+					}
+				}
+			}
+		});
+	}
+*/
 	
 	private void bundleSurfaceHolderCallback(){
 		previewSurfaceView = (SurfaceView) findViewById(R.id.previewsurface);
@@ -173,10 +226,16 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 			@Override
 			public void surfaceCreated(SurfaceHolder surfaceHolder) {
 				myCamera = Camera.open();
-				parameters = myCamera.getParameters();
-				maxZoom = parameters.getMaxZoom();
+				Log.d(TAG, "Open Camera !");
 				
+				parameters = myCamera.getParameters();
+				Log.d(TAG, "Get Parameters !");
+				
+				maxZoom = parameters.getMaxZoom();
 				myCamera.setZoomChangeListener(new MySmoothZoomListener());
+				
+//				Log.d(TAG, "Run bundleSeekBar !");
+//				bundleSeekBar();
 			}
 
 			@Override
@@ -363,6 +422,8 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
 	}
+	
+	
 	
 /*
 	private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
