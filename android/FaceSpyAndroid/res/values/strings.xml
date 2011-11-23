@@ -2,4 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="hello">Hello World, FaceSpy!</string>
     <string name="app_name">FaceSpy</string>
+    <string name="save_dir">FaceSpy</string>
+    <string name="alpha_value">225</string>
 </resources>
