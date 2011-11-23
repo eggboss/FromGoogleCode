@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- 
+教學：
+http://zzjnet.blog.51cto.com/323001/332707
+http://www.cnblogs.com/weiqt/articles/2013800.html
+http://rocketsquared.com/wiki/Plugins/Validation/validate#toptions
+
+metadata：
+http://plugins.jquery.com/project/metadata
+
+validation：
+http://docs.jquery.com/Plugins/Validation
+ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jQuery plugin - Validation</title>
+
+<script type="text/javascript" src="../js/jquery-1.4.2.js"></script>
+
+<!-- jQuery Validation js -->
+<script type="text/javascript" src="../js/validation/jquery.validate.js"></script>
+
+<!-- 統一的中文訊息 -->
+<script type="text/javascript" src="../js/validation/messages_tw.js"></script>
+
+<!-- 若想在class裡面使用{}就得匯入這個js -->
+<script type="text/javascript" src="../js/metadata/jquery.metadata.js"></script>
+
+<!-- 
+<script type="text/javascript" src="../js/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/ui/css/smoothness/jquery-ui-1.8.16.custom.css"/>
+ -->
+ 
+<style type="text/css">
+	* { font-family: Verdana; font-size: 96%; }
+	label { width: 10em; float: left; }
+	label.error { float: none; color: red; padding-left: .5em; vertical-align: top; }
+	p { clear: both; }
+	.submit { margin-left: 12em; }
+	em { font-weight: bold; padding-right: 1em; vertical-align: top; }
+</style>
+<!-- 
+(1)required:true 必輸字段
+(2)remote:"check.php" 使用ajax方法調用check.php驗證輸入值
+(3)email:true 必須輸入正確格式的電子郵件
+(4)url:true 必須輸入正確格式的網址
+(5)date:true 必須輸入正確格式的日期
+(6)dateISO:true 必須輸入正確格式的日期(ISO)，例如：2009-06-23，1998/01/22 只驗證格式，不驗證有效性
+(7)number:true 必須輸入合法的數字(負數，小數)
+(8)digits:true 必須輸入整數
+(9)creditcard: 必須輸入合法的信用卡號
+(10)equalTo:"#field" 輸入值必須和#field相同
+(11)accept: 輸入擁有合法後綴名的字符串（上傳文件的後綴）
+(12)maxlength:5 輸入長度最多是5的字符串(漢字算一個字符)
+(13)minlength:10 輸入長度最小是10的字符串(漢字算一個字符)
+(14)rangelength:[5,10] 輸入長度必須介於 5 和 10 之間的字符串")(漢字算一個字符)
+(15)range:[5,10] 輸入值必須介於 5 和 10 之間
+(16)max:5 輸入值不能大於5
+(17)min:10 輸入值不能小於10
+ -->
+<script>
+	$(document).ready(function(){
+		var errors = "";
+		
+		jQuery.validator.addMethod("endDate", function(value, element, param) {
+			var startDate = $(param).val();
+			return Date.parse(startDate) <= Date.parse(value) || value == "";
+		});
+		
+		jQuery.validator.addMethod("dateGreaterThan", function(value, element, param) {
+			var targetDate = $(param).val();
+			return Date.parse(targetDate) <= Date.parse(value) || value == "";
+		}, '必需大於 {0}');
+		
+		jQuery.validator.addMethod("greaterThan", function(value, element, params) {
+	        /* 這裡check日期有問題！
+	        if (!/Invalid|NaN/.test(new Date(value))) {
+	            return new Date(value) > new Date($(params).val());
+	        }*/
+	        return isNaN(value) && isNaN($(params).val()) || (parseFloat(value) > parseFloat($(params).val())); 
+	    }, 'Must be greater than ' + $('#number1').val());
+		
+		$("#commentForm").validate({
+			debug: true,         // 不會submit
+			ignore: ".ignore",   // escape vaoidation
+			/*dateISO: function(value, element) {
+				return this.optional(element) || (/^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value) && this.methods.date(value,element));
+			},*/
+			/*endDate: function(value, element, param) {
+				alert(123);
+				var startDate = $('#'+param).val();
+				alert(startDate);
+				return false; //Date.parse(startDate) <= Date.parse(value) || value == "";
+			},*/
+			rules: {
+				// 針對name而不是id！
+				name: {
+					required: true,
+					minlength: 2
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				number: {
+					required: true,
+					digits: true,
+					min: 1
+				},
+				date: {
+					dateISO: true
+				}
+			}
+			/*,messages: {
+				name: {
+					required: "We need your email address to contact you",
+					minlength: jQuery.format("At least {0} characters required!")
+				},
+				email: "請輸入正確格式的電子郵件",
+				number: {
+					required: "請輸入合法的數字",
+					digits: "只能輸入整數",
+					//min: $.validator.format("請輸入一個最小為 {0} 的值")
+					//min: min: jQuery.validator.format("請輸入一個最小為 {0} 的值")
+					min: jQuery.format("請輸入一個最小為 {0} 的值")
+				},
+				date: {
+					dateISO: "請輸入合法的日期 (ISO)."
+				}
+			}*/
+			
+			/*
+			,errorPlacement: function(error, element) {
+				//errors += error.html()+"\n";
+				
+				error.insertAfter(element);
+                alert(error.html());
+			},
+			showErrors: function(errorMap, errorList){
+				this.defaultShowErrors();
+				//alert(errors);
+				//$('#errorMsg').html(errors);
+				//errors="";
+			}
+			*/
+		});
+	});
+</script>
+</head>
+<body>
+	<form class="cmxform" id="commentForm" method="get" action="">
+		<fieldset>
+			<legend>A simple comment form with submit validation and default messages</legend>
+			<p>
+				<label for="cname">Name</label>
+				<em>*</em><input id="cname" name="name" size="25"/>
+			</p>
+			<p>
+				<label for="cemail">E-Mail</label>
+				<em>*</em><input id="cemail" name="email" size="25" class="ignore"/>
+			</p>
+			<p>
+				<label for="curl">URL</label><!-- 也可以寫在class裡面 -->
+				<em>  </em><input id="curl" name="url" size="25" class="required"/>
+			</p>
+			<p>
+				<label for="curl">Price</label><!-- 也可以寫在class裡面 -->
+				<em>  </em><input id="cprice" name="price" size="25" class="{required:true, digits:true, max:5}"/>
+			</p>
+			<p>
+				<label for="ccomment">Your comment</label>
+				<em>*</em><textarea id="ccomment" name="comment" cols="22"></textarea>
+			</p>
+			<p>
+				<label for="cdate">Date</label>
+				<em>*</em><input id="cdate" name="date" size="11"/>
+			</p>
+			<p>
+				<label for="cnumber">Number</label>
+				<em>*</em><input id="cnumber" name="number" size="11"/>
+			</p>
+			<p>
+				<label for="crange">Range</label>
+				<em>*</em><input id="crange" name="range" size="11" class="{required:true, range:[5,10]}"/>
+			</p>
+			<p>
+				<label for="startDate">Start Date</label>
+				<em>*</em><input name="startDate" id="startDate" size="11" value="2011-11-05""/>
+			</p>
+			<p>
+				<label for="cenddate">End Date</label>
+				<em>*</em><input id="cenddate" name="endDate" size="11" value="" class="{required:true, endDate:'#startDate'}"/>
+			</p>
+			<p>
+				<label for="otherDate">Other Date</label>
+				<em>*</em><input id="otherDate" name="otherDate" value="2011-11-04" size="11" class="{dateGreaterThan:'#startDate'}"/>
+			</p>
+			<p>
+				<label for="number2">GreaterThan</label>
+				<input name="number1" id="number1" size="3" value="50"/> &lt;
+				<input name="number2" id="number2" size="3" value="40" class="{greaterThan:'#number1',messages:{greaterThan:'要大於 '+$('#number1').val()}}"/>
+			</p>
+			<p>
+				<input class="submit" type="submit" value="Submit"/>
+			</p>
+		</fieldset>
+	</form>	
+	Error Msg:<br>
+	<span id="errorMsg"></span>
+</body>
+</html>

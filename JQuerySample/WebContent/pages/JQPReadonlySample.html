@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- 
+http://abgne.tw/jquery/jquery-plugins/jquery-plugin-readonly-1-0-beta-1.html
+
+ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>jQuery plugin - Readonly</title>
+
+<script type="text/JavaScript" src="../js/jquery-1.4.2.js"></script>
+<script type="text/JavaScript" src="../js/readonly/jquery.readonly.js"></script>
+<link rel="stylesheet" type="text/css" href="../js/readonly/jquery.readonly.css"/>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#enableeadonly').click(function(){
+		/*$('#demo').readonly({
+			enabled: true
+		});*/
+		$('#demo').readonly(true);
+	});
+	$('#disableReadonly').click(function(){
+		$('#demo').readonly(false);
+	});
+});
+</script>
+
+</head>
+<body>
+<p>
+<input type="button" name="enableeadonly" id="enableeadonly" value="Enable Readonly">
+<input type="button" name="disableReadonly" id="disableReadonly" value="Disable Readonly"><br><br>
+
+<select name="demo" id="demo">
+	<option>001</option>
+	<option>002</option>
+	<option>003</option>
+</select>
+
+</p>
+</body>
+</html>
