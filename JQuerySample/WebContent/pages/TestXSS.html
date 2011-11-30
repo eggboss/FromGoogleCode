@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+function pushIt(){
+	try{
+	alert(1);
+	if(arguments && arguments.length>0){
+		alert(arguments.length);
+		alert(arguments[1]);
+	}
+	}catch(e){
+		alert(e);
+	}
+}
+
+function ck(){
+	try{
+		alert('測 &lt; 試 &gt; 書 &#39; 名 &quot;');
+		pushIt('201105310001','測 &lt; 試 &gt; 書 &#39; 名 &quot;','201105250007.jpg','書籍','2','2011-05-11 00:00:00','2011-06-25 23:59:59','B','201105250007');
+	}catch(e){
+		alert(e);
+	}
+}
+function getText(value){
+	try{
+		alert(value);
+	}catch(e){
+		alert(e);
+	}
+}
+</script>
+</head>
+<body>
+<span id="tt">測 &lt; 試 &gt; 書 &#39; 名 &quot;</span><br>
+<input type="button" value="go" onclick="ck()"><br>
+<input type="button" value="Get Text" onclick="getText(document.getElementById('tt').childNodes.item(0).nodeValue)">
+
+</body>
+</html>
