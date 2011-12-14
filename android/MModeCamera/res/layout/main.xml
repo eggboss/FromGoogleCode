@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<SurfaceView
+	    android:id="@+id/previewsurface" 
+	    android:layout_width="fill_parent"
+	   	android:layout_height="fill_parent"
+	    
+	    />
+	<TextView 
+		android:id="@+id/tview"
+	   	android:layout_width="fill_parent"
+	   	android:layout_height="fill_parent"
+	   	android:background="#FFFFFF"
+	   	android:layout_weight="1"
+	   	/>
+	<SeekBar android:id="@+id/zoomRate"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"/>
+	<SeekBar android:id="@+id/exposureSeekBar"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"
+		android:paddingTop="50px"
+		/>
+	<SeekBar android:id="@+id/isoSeekBar"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"
+		android:paddingTop="100px"
+		/>
+</AbsoluteLayout>
