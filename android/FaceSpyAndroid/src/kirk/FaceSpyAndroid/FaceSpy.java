@@ -147,7 +147,7 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 		
 	}
 	
-/*
+
 	private void bundleSeekBar(){
 		// SeekBar
 		seekBar = (SeekBar)findViewById(R.id.zoomRate);
@@ -184,7 +184,7 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 			}
 		});
 	}
-*/
+
 	
 	private void bundleSurfaceHolderCallback(){
 		previewSurfaceView = (SurfaceView) findViewById(R.id.previewsurface);
@@ -234,8 +234,8 @@ public class FaceSpy extends Activity{; //implements SurfaceHolder.Callback {
 				maxZoom = parameters.getMaxZoom();
 				myCamera.setZoomChangeListener(new MySmoothZoomListener());
 				
-//				Log.d(TAG, "Run bundleSeekBar !");
-//				bundleSeekBar();
+				Log.d(TAG, "Run bundleSeekBar !");
+				bundleSeekBar();
 			}
 
 			@Override

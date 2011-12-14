@@ -17,4 +17,7 @@
 	   	android:background="@drawable/bk006"
 	   	android:layout_weight="1"
 	   	/>
+	<SeekBar android:id="@+id/zoomRate"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"/>
 </AbsoluteLayout>
