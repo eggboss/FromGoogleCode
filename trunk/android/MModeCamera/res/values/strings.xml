@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string name="hello">Hello World, MModeCameraActivity!</string>
+    <string name="app_name">MModeCamera</string>
+    <string name="save_dir">MModeCamera</string>
+    <string name="alpha_value">0</string>
+</resources>
