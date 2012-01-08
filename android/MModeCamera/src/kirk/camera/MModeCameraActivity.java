@@ -45,6 +45,22 @@ import android.widget.Toast;
  * http://forum.xda-developers.com/showthread.php?t=875230
  * 
  * @author kirk
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 		<SeekBar android:id="@+id/zoomRate"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"/>
+		
+		
+		
+		<SeekBar android:id="@+id/isoSeekBar"
+		android:layout_width="280dip"
+		android:layout_height="wrap_content"
+		android:paddingTop="200px"
+		/>
  *
  */
 public class MModeCameraActivity extends Activity {
@@ -129,7 +145,7 @@ public class MModeCameraActivity extends Activity {
 		
 	}
 	
-	
+/*	
 	private void bundleSeekBar(){
 		// SeekBar
 		seekBar = (SeekBar)findViewById(R.id.zoomRate);
@@ -159,6 +175,7 @@ public class MModeCameraActivity extends Activity {
 			}
 		});
 	}
+*/
 	
 	private void bundleExposureSeekBar(){
 
@@ -206,13 +223,7 @@ public class MModeCameraActivity extends Activity {
 					myCamera.stopPreview();
 					previewing = false;
 				}
-	
-	//			Log.i(TAG, "format=" + format);
-	//			Log.i(TAG, "width=" + width);
-	//			Log.i(TAG, "height=" + height);
-				
 				try {
-					
 					// 解決preview時會轉90度的問題
 	//				Camera.Parameters parameters = myCamera.getParameters();
 	//		        List<Size> sizes = parameters.getSupportedPreviewSizes();
@@ -225,7 +236,6 @@ public class MModeCameraActivity extends Activity {
 			        parameters.set("preview-size", "800x480");
 			        parameters.set("iso", "false");
 					
-	//				surfaceHolder.setFixedSize(192, 175);
 					myCamera.setPreviewDisplay(surfaceHolder);
 					myCamera.startPreview();
 					previewing = true;
@@ -246,8 +256,8 @@ public class MModeCameraActivity extends Activity {
 				maxZoom = parameters.getMaxZoom();
 				myCamera.setZoomChangeListener(new MySmoothZoomListener());
 				
-				Log.d(TAG, "Run bundleSeekBar !");
-				bundleSeekBar();
+//				Log.d(TAG, "Run bundleSeekBar !");
+//				bundleSeekBar();
 				
 				bundleExposureSeekBar();
 			}
@@ -272,28 +282,15 @@ public class MModeCameraActivity extends Activity {
 			
 			@Override
 			public boolean onDown(MotionEvent e) {
-	//			Log.d(TAG, "onDown");
 				return super.onDown(e);
 			}
 	
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-	//			Log.d(TAG, "onFling");
-	//			myCamera.stopSmoothZoom();
-	//			Log.d(TAG, "isSmoothZoomSupported="+parameters.isSmoothZoomSupported());
 				try {
 					if(Math.abs(e1.getY() - e2.getY()) < 100){
 						float moveSize = e2.getX()-e1.getX();
-	//					Log.d(TAG, "Move size = " + moveSize);
-						
-	//					float fZoom = (moveSize/400) * maxZoom;
-	//					Log.d(TAG, "Float zoom = " + fZoom);
-						
-	//					int zoom = (int)fZoom;
-	//					Log.d(TAG, "add zoom: " + zoom);
-						
 						int cZoom = parameters.getZoom(); // 目前的zooom
-	//					cZoom += zoom;
 						
 						if(moveSize>0 && cZoom<maxZoom){
 							cZoom++;
@@ -310,7 +307,6 @@ public class MModeCameraActivity extends Activity {
 						}else{
 							parameters.setZoom(maxZoom);
 							myCamera.setParameters(parameters);
-	//						Log.d(TAG, "over zoom!");
 						}
 					}
 				} catch (Exception e) {
@@ -401,8 +397,6 @@ public class MModeCameraActivity extends Activity {
 	PictureCallback jpegPictureCallback = new PictureCallback() {
 		@Override
 		public void onPictureTaken(byte[] arg0, Camera arg1) {
-			// 解決問題：OutOfMemoryError: bitmap size exceeds VM budget
-			// http://blog.csdn.net/wen0006/archive/2010/11/15/6009634.aspx
 			BitmapFactory.Options opts = new BitmapFactory.Options();
 			opts.inSampleSize = 2;
 			
@@ -413,13 +407,9 @@ public class MModeCameraActivity extends Activity {
 	
 	private void saveImage(Bitmap bm){
 		String barcodeNumber = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-	//	MediaStore.Images.Media.insertImage(getContentResolver(), bm, barcodeNumber + ".jpg Card Image", barcodeNumber + ".jpg Card Image");
-		
 		FileOutputStream out = null;
 		try {
 			String imgPath = SDPath + File.separator + saveDir + File.separator + barcodeNumber + ".JPG";
-			//Log.i(TAG, "Img Path=" + imgPath);
-			//Log.i(TAG, "getFilesDir=" + getFilesDir());
 			out = new FileOutputStream(imgPath);
 			bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
 			
@@ -428,7 +418,6 @@ public class MModeCameraActivity extends Activity {
 			e.printStackTrace();
 			Log.e(TAG, "Save Image Error!! Error Message: " + e.getMessage());
 		}
-		
 		Toast.makeText(this, barcodeNumber + ".JPG Saved.", Toast.LENGTH_SHORT).show();
 	}
 	
@@ -436,42 +425,5 @@ public class MModeCameraActivity extends Activity {
 	public boolean onTouchEvent(MotionEvent event) {
 		return gestureDetector.onTouchEvent(event);
 	}
-	
-	
-	
-	/*
-	private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
-	    final double ASPECT_TOLERANCE = 0.05;
-	    double targetRatio = (double) w / h;
-	    if (sizes == null) return null;
-	
-	    Size optimalSize = null;
-	    double minDiff = Double.MAX_VALUE;
-	
-	    int targetHeight = h;
-	
-	    // Try to find an size match aspect ratio and size
-	    for (Size size : sizes) {
-	        double ratio = (double) size.width / size.height;
-	        if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-	        if (Math.abs(size.height - targetHeight) < minDiff) {
-	            optimalSize = size;
-	            minDiff = Math.abs(size.height - targetHeight);
-	        }
-	    }
-	
-	    // Cannot find the one match the aspect ratio, ignore the requirement
-	    if (optimalSize == null) {
-	        minDiff = Double.MAX_VALUE;
-	        for (Size size : sizes) {
-	            if (Math.abs(size.height - targetHeight) < minDiff) {
-	                optimalSize = size;
-	                minDiff = Math.abs(size.height - targetHeight);
-	            }
-	        }
-	    }
-	    return optimalSize;
-	}
-	*/
 	
 }

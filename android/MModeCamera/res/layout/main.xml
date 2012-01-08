@@ -17,17 +17,12 @@
 	   	android:background="#FFFFFF"
 	   	android:layout_weight="1"
 	   	/>
-	<SeekBar android:id="@+id/zoomRate"
-		android:layout_width="280dip"
-		android:layout_height="wrap_content"/>
+	
+	
 	<SeekBar android:id="@+id/exposureSeekBar"
 		android:layout_width="280dip"
 		android:layout_height="wrap_content"
-		android:paddingTop="50px"
+		android:paddingTop="300px"
 		/>
-	<SeekBar android:id="@+id/isoSeekBar"
-		android:layout_width="280dip"
-		android:layout_height="wrap_content"
-		android:paddingTop="100px"
-		/>
+	
 </AbsoluteLayout>
