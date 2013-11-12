@@ -231,12 +231,20 @@ public class DataBaseTableToExcelGUI extends JFrame {
 				frame.setLocationRelativeTo(null);
 				frame.setVisible(true);
 				
-				frame.getJTextField0().setText("10.76.134.3");
-				frame.getJTextField5().setText("1533");
-				frame.getJTextField1().setText("APPSS");
-				frame.getJTextField2().setText("ebookstg");
-				frame.getJTextField3().setText("ebookstg123");
-				frame.getJTextField6().setText("FET_EBOOK_TABLES");
+//				frame.getJTextField0().setText("10.76.134.3");
+//				frame.getJTextField5().setText("1533");
+//				frame.getJTextField1().setText("APPSS");
+//				frame.getJTextField2().setText("ebookstg");
+//				frame.getJTextField3().setText("ebookstg123");
+//				frame.getJTextField6().setText("FET_EBOOK_TABLES");
+				
+				frame.getJTextField0().setText("10.64.32.137");
+				frame.getJTextField5().setText("1522");
+				frame.getJTextField1().setText("addon");
+				frame.getJTextField2().setText("addon");
+				frame.getJTextField3().setText("addon123");
+				frame.getJTextField6().setText("FET_SETTLEMENT_TABLES");
+				
 				frame.getJTextField4().setText("D:");
 			}
 		});

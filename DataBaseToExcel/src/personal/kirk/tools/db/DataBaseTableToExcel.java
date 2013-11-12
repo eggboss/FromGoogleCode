@@ -298,6 +298,7 @@ public class DataBaseTableToExcel{
 					}
 					
 					cell = row.createCell(4);
+//					commentString = (commentString!=null?new String(commentString.getBytes("ISO8859-1"),"UTF-8"):commentString); // 資料庫為UTF-8
 					HSSFRichTextString _comment = new HSSFRichTextString(commentString);
 					cell.setCellValue(_comment);
 					if(isPK){
@@ -645,8 +646,11 @@ public class DataBaseTableToExcel{
 		
 //		cei.setOracleConnection("172.30.12.223", "1521", "CMSDB", "ecuser1", "twm0919");
 //		cei.setOracleConnection("172.30.12.223", "1521", "CMSDBS", "ap_ecuser", "twmec2ap");
-		cei.setOracleConnection("10.76.134.3", "1533", "APPSS", "ebookstg", "ebookstg123");
-		cei.createOneFile("D:/", "FET_EBOOK_TABLES");
+//		cei.setOracleConnection("10.76.134.3", "1533", "APPSS", "ebookstg", "ebookstg123");
+//		cei.createOneFile("D:/", "FET_EBOOK_TABLES");
+		
+		cei.setOracleConnection("10.64.16.67", "1533", "AR", "payment", "payment");
+		cei.createOneFile("D:/", "FET_PAYMENT_PT_TABLES");
 		
 		
 	}
