@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<project name="cerberus" basedir="." default="mkJar">
+	<property name="cerberus.location" value="C:/java/workspace2/cerberus"/>
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="classes.dir" value="${basedir}/classes"/>
+	<property name="lib.dir" value="${basedir}/lib"/>
+	<property name="used.dir" value="c:/java/workspace2/hyYMService/WEB-INF/lib"/>
+	
+	<target name="compile">
+		<javac
+		      srcdir="${src.dir}"
+		      destdir="${classes.dir}">
+		  <!--classpath refid="project.classpath"/-->
+		</javac>
+	</target>
+	
+	<target name="delete-jar">
+		<delete>
+			<fileset dir=".">
+				<include name="${cerberus.location}/cerberus.jar"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="mkJar" depends="delete-jar,compile">
+		<jar destfile="${cerberus.location}/cerberus.jar">
+			<zipfileset dir="${classes.dir}/config" prefix="config"/>
+			<zipfileset dir="${classes.dir}/hornyu" prefix="hornyu"/>
+			<zipfileset dir="${classes.dir}/sql" prefix="sql"/>
+			<zipfileset file="${basedir}/build.xml"/>
+			<zipfileset file="${basedir}/readme"/>
+		</jar>
+		
+		<copy todir="${used.dir}" overwrite="true">
+			<fileset dir="${basedir}" includes="${ant.project.name}.jar"/>
+		</copy>
+	</target>
+	
+</project>
