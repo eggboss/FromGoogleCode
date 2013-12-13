@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="myDiv"></div>
+</body>
+</html>
+<!-- http://www.w3schools.com/ajax/ajax_xmlhttprequest_create.asp -->
+<script type="text/javascript">
+
+	var xmlhttp;
+	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+
+	/* for GET */
+	var url = 'http://tw.screener.finance.yahoo.net/future/aa03?opmr=optionfull&opcm=WTXO&opym=201307';
+	xmlhttp.open("GET", url, false); // open(method,url,async)
+	xmlhttp.send();
+	
+	
+	/* for POST 
+	var url = 'http://tw.screener.finance.yahoo.net/future/aa03';
+	xmlhttp.open("POST", url, false); // open(method,url,async)
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+	xmlhttp.setRequestHeader("Access-Control-Allow-Methods","GET, POST, PUT, DELETE");
+	xmlhttp.setRequestHeader("Access-Control-Allow-Headers","Authorization");
+	xmlhttp.send("opmr=optionfull&opcm=WTXO&opym=201307");
+	*/
+	
+	xmlhttp.onreadystatechange = function() {
+		console.log('xmlhttp.readyState=' + xmlhttp.readyState);
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+		}else{
+			document.getElementById("myDiv").innerHTML = 'ERROR';
+		}
+	}
+	
+</script>
