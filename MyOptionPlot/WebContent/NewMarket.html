@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>最新行情</title>
+<script type="text/javascript" src="js/jquery-1.10.1.js"></script>
+<script type="text/javascript" src="MyOptionUtils.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	//alert(getThirdWednesdate(new Date(2013, 5, 1)));
+//	$('#data').load('http://tw.screener.finance.yahoo.net/future/aa03?opmr=optionfull&opcm=WTXO&opym=201307');
+
+	var iframe=document.createElement('IFRAME');
+
+	iframe.src='http://tw.screener.finance.yahoo.net/future/aa03?opmr=optionfull&opcm=WTXO&opym=201307';
+	iframe.setAttribute('id','testframe');
+	iframe.setAttribute('name','testframe');
+
+	if (iframe.attachEvent){
+	    iframe.attachEvent("onload", function(){
+	        alert("Local iframe is now loaded.");
+	        alert($(iframe).contents());
+	    });
+	} else {
+	    iframe.onload = function(){
+	        alert("Local iframe is now loaded.");
+	        alert($(iframe).contents());
+	    };
+	}
+	
+	document.body.appendChild(iframe);
+
+	/*
+	var testFrame=document.getElementById('testframe');
+	testFrame.onload=function(){
+	    var obj=getIframeObj(testFrame);
+	    var o=obj.body.innerHTML;    
+	    alert(o);
+	}*/
+	
+});
+
+
+function getIframeObj(id){
+    var obj;
+    if(id.contentDocument){
+        obj=id.contentDocument;
+    }else if(id.contentWindow){
+        obj=id.contentWindow.document;
+    }else{
+        obj=window.frames[id.name].document;
+    }
+    return obj; 
+}
+</script>
+</head>
+<body>
+</body>
+</html>

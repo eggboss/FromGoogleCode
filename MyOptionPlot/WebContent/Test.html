@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>測試頁</title>
+<!-- <script type="text/javascript" src="js/jquery-1.10.1.js"></script> -->
+<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+<!-- <script type="text/javascript" src="js/jquery.fileDownload.js"></script>
+<script type="text/javascript" src="js/json2.js"></script> -->
+<script type="text/javascript" src="CommonUtils.js"></script>
+<script type="text/javascript" src="MyOptionUtils.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	//var url = 'http://tw.screener.finance.yahoo.net/future/aa03?opmr=optionfull&opcm=WTXO&opym=201307';
+	//$.fileDownload(url);
+	/*
+	$.fileDownload(url, {
+	    successCallback: function (url) {
+	        alert('You just got a file download dialog or ribbon for this URL :' + url);
+	    },
+	    failCallback: function (html, url) {
+	        alert('Your file download just failed for this URL:' + url + '\r\n' +
+	                'Here was the resulting error HTML: \r\n' + html);
+	    }
+	});
+	*/
+	
+	var today = new Date();
+	alert(getOptionWeekOfMonth(today));
+});
+</script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+
+</body>
+</html>

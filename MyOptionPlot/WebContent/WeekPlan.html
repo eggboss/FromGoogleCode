@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>台指選擇權策略試算</title>
+<!-- <script type="text/javascript" src="js/jquery-1.10.1.js"></script> -->
+<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+<link rel="stylesheet" type="text/css" href="js/jquery.jqplot.min.css" />
+<script language="javascript" type="text/javascript" src="js/jqplot.highlighter.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/jqplot.cursor.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/jqplot.dateAxisRenderer.min.js"></script>
+<script type="text/javascript" src="CommonUtils.js"></script>
+<script type="text/javascript" src="MyOptionUtils.js"></script>
+<script type="text/javascript" src="Demo.js"></script>
+<!-- file:///D:/projects/fet_settlement/workspace/MyOption/WebContent/Plan.html -->
+<script type="text/javascript">
+var plotValue = "05";
+var param;
+$(document).ready(function() {
+	
+	var params = getQueryString('opym'); // like 507
+	if(params!=''){
+		opym = params;
+	}else{
+		opym = getOptionWeekOfMonth(new Date());
+	}
+	
+	$('#opym').text(opym.substr(1,2)+'W'+opym.substr(0,1));
+	
+	// update
+	param='m=w&t='+opym
+	renewData_capital(param);
+	//renewDataByOpenWindow();
+	
+	// init
+	$('#taiex').text(getTAIEX());
+	for(var i=1; i<=8; i++){
+		appendBuySaleSelect('buy_sell_' + i);
+		appendCallPutSelect('call_put_' + i);
+		appendExcercisePriceSelect('excercise_price_' + i);
+	}
+	initReportTable();
+	
+	// init condition
+	//setTimeout(initCondition, 10000);
+	initCondition();
+	//	renewReportTable();
+
+	showLineChart()
+});
+
+function initCondition(){
+	//demo05();
+	changePlot(plotValue);
+}
+
+function changePlot(value){
+	plotValue = value;
+	var func = new Function("return demo" + value + "()");
+	func();
+}
+
+function refresh(){
+	if(confirm('確定更新？')){
+		renewData_capital(param);
+		$('#taiex').text(getTAIEX());
+		initCondition();
+		alert('更新完成 !');
+	}
+}
+</script>
+<style type="text/css">
+.td_header{
+	font-weight: bold;
+}
+.td_total{
+	background-color: #FFFF99;
+}
+table#condition_table td{
+	width: 70px;
+	text-align: right;
+};
+.btn_style{
+	width:80px;
+};
+</style>
+</head>
+<body>
+<table>
+<tr>
+<td>
+
+
+
+<table border="1" id="condition_table">
+	<tr>
+		<td id="opym" style="font-weight: bold;"></td>
+		<td colspan="2" style="text-align: left; font-weight: bold;">
+			<span id="plan_name"></span>
+			<!-- <select name="plotSelecter" id="plotSelecter" onchange="changePlot(this.value)">
+				<option value="05">05 買權多頭價差</option>
+				<option value="06">06 賣權多頭價差</option>
+				<option value="07">07 買權空頭價差</option>
+				<option value="08">08 賣權空頭價差</option>
+				<option value="09">09 作多價外逆轉組合</option>
+				<option value="10">10 作空價外逆轉組合</option>
+				<option value="11">11 買進跨式部位</option>
+				<option value="12">12 買進勒式部位</option>
+				<option value="13">13 賣出跨式部位</option>
+				<option value="14">14 賣出勒式部位</option>
+				<option value="15">15 買進買權蝶式部位</option>
+				<option value="16">16 買進賣權蝶式部位</option>
+				<option value="17">17 買進買權兀鷹部位</option>
+				<option value="18">18 買進賣權兀鷹部位</option>
+				<option value="19">19 賣出買權蝶式部位</option>
+				<option value="20">20 賣出賣權蝶式部位</option>
+				<option value="21">21 賣出買權兀鷹部位</option>
+				<option value="22">22 賣出賣權兀鷹部位</option>
+				<option value="23">23 買進買權調整蝶式部位</option>
+				<option value="24">24 買進賣權調整蝶式部位</option>
+				<option value="25">25 買進鐵蝴蝶部位</option>
+				<option value="26">26 賣出鐵蝴蝶部位</option>
+				<option value="31">31 買進組合式期貨</option>
+				<option value="32">32 賣出組合式期貨</option>
+				<option value="33">33 買權比率價差部位</option>
+				<option value="34">34 賣權比率價差部位</option>
+				<option value="35">35 買權逆比率價差部位</option>
+				<option value="36">36 賣權逆比率價差部位</option>
+				<option value="37">37 買進篇空跨式部位</option>
+			</select> -->
+		</td>
+		<td class="td_header">目前指數</td>
+		<td id="taiex" style="font-weight: bold; background-color: #FFFF99;"></td>
+		<td rowspan="11" colspan="5" style="text-align: right; width: 400px;">
+			<div id="chartdiv" style="height:300px;width:385px; "></div>
+		</td>
+	</tr>
+	<tr><td><input type="button" onclick="refresh()" value="更新報價"></td><td class="td_header">買/賣</td><td class="td_header">買權/賣權</td><td class="td_header">履約價</td><td class="td_header">權利金</td></tr>
+	<tr><td>1</td><td id="buy_sell_1"></td><td id="call_put_1"></td><td id="excercise_price_1"></td><td id="premium_1"></td></tr>
+	<tr><td>2</td><td id="buy_sell_2"></td><td id="call_put_2"></td><td id="excercise_price_2"></td><td id="premium_2"></td></tr>
+	<tr><td>3</td><td id="buy_sell_3"></td><td id="call_put_3"></td><td id="excercise_price_3"></td><td id="premium_3"></td></tr>
+	<tr><td>4</td><td id="buy_sell_4"></td><td id="call_put_4"></td><td id="excercise_price_4"></td><td id="premium_4"></td></tr>
+	<tr><td>5</td><td id="buy_sell_5"></td><td id="call_put_5"></td><td id="excercise_price_5"></td><td id="premium_5"></td></tr>
+	<tr><td>6</td><td id="buy_sell_6"></td><td id="call_put_6"></td><td id="excercise_price_6"></td><td id="premium_6"></td></tr>
+	<tr><td>7</td><td id="buy_sell_7"></td><td id="call_put_7"></td><td id="excercise_price_7"></td><td id="premium_7"></td></tr>
+	<tr><td>8</td><td id="buy_sell_8"></td><td id="call_put_8"></td><td id="excercise_price_8"></td><td id="premium_8"></td></tr>
+	<tr><td colspan="5" id="total_amt"></td></tr>
+<!-- </table>
+<table border="1" id="report_table"> -->
+	<tr>
+		<td>台指<!-- <input type="button" onclick="renewReportTable()" value="台指/試算"> --></td>
+		<td class="td_header">1</td><td class="td_header">2</td><td class="td_header">3</td><td class="td_header">4</td>
+		<td class="td_header">5</td><td class="td_header">6</td><td class="td_header">7</td><td class="td_header">8</td>
+		<td class="td_header">TOTAL</td>
+	</tr>
+	<tr>
+		<td id="report_1_0" class="td_header"></td><td id="report_1_1"></td><td id="report_1_2"></td><td id="report_1_3"></td><td id="report_1_4"></td>
+		<td id="report_1_5"></td><td id="report_1_6"></td><td id="report_1_7"></td><td id="report_1_8"></td><td id="report_1_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_2_0" class="td_header"></td><td id="report_2_1"></td><td id="report_2_2"></td><td id="report_2_3"></td><td id="report_2_4"></td>
+		<td id="report_2_5"></td><td id="report_2_6"></td><td id="report_2_7"></td><td id="report_2_8"></td><td id="report_2_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_3_0" class="td_header"></td><td id="report_3_1"></td><td id="report_3_2"></td><td id="report_3_3"></td><td id="report_3_4"></td>
+		<td id="report_3_5"></td><td id="report_3_6"></td><td id="report_3_7"></td><td id="report_3_8"></td><td id="report_3_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_4_0" class="td_header"></td><td id="report_4_1"></td><td id="report_4_2"></td><td id="report_4_3"></td><td id="report_4_4"></td>
+		<td id="report_4_5"></td><td id="report_4_6"></td><td id="report_4_7"></td><td id="report_4_8"></td><td id="report_4_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_5_0" class="td_header"></td><td id="report_5_1"></td><td id="report_5_2"></td><td id="report_5_3"></td><td id="report_5_4"></td>
+		<td id="report_5_5"></td><td id="report_5_6"></td><td id="report_5_7"></td><td id="report_5_8"></td><td id="report_5_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_6_0" class="td_header"></td><td id="report_6_1"></td><td id="report_6_2"></td><td id="report_6_3"></td><td id="report_6_4"></td>
+		<td id="report_6_5"></td><td id="report_6_6"></td><td id="report_6_7"></td><td id="report_6_8"></td><td id="report_6_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_7_0" class="td_header"></td><td id="report_7_1"></td><td id="report_7_2"></td><td id="report_7_3"></td><td id="report_7_4"></td>
+		<td id="report_7_5"></td><td id="report_7_6"></td><td id="report_7_7"></td><td id="report_7_8"></td><td id="report_7_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_8_0" class="td_header"></td><td id="report_8_1"></td><td id="report_8_2"></td><td id="report_8_3"></td><td id="report_8_4"></td>
+		<td id="report_8_5"></td><td id="report_8_6"></td><td id="report_8_7"></td><td id="report_8_8"></td><td id="report_8_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_9_0" class="td_header"></td><td id="report_9_1"></td><td id="report_9_2"></td><td id="report_9_3"></td><td id="report_9_4"></td>
+		<td id="report_9_5"></td><td id="report_9_6"></td><td id="report_9_7"></td><td id="report_9_8"></td><td id="report_9_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_10_0" class="td_header"></td><td id="report_10_1"></td><td id="report_10_2"></td><td id="report_10_3"></td><td id="report_10_4"></td>
+		<td id="report_10_5"></td><td id="report_10_6"></td><td id="report_10_7"></td><td id="report_10_8"></td><td id="report_10_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_11_0" class="td_header"></td><td id="report_11_1"></td><td id="report_11_2"></td><td id="report_11_3"></td><td id="report_11_4"></td>
+		<td id="report_11_5"></td><td id="report_11_6"></td><td id="report_11_7"></td><td id="report_11_8"></td><td id="report_11_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_12_0" class="td_header"></td><td id="report_12_1"></td><td id="report_12_2"></td><td id="report_12_3"></td><td id="report_12_4"></td>
+		<td id="report_12_5"></td><td id="report_12_6"></td><td id="report_12_7"></td><td id="report_12_8"></td><td id="report_12_9" class="td_total"></td>
+	</tr>
+	<tr>
+		<td id="report_13_0" class="td_header"></td><td id="report_13_1"></td><td id="report_13_2"></td><td id="report_13_3"></td><td id="report_13_4"></td>
+		<td id="report_13_5"></td><td id="report_13_6"></td><td id="report_13_7"></td><td id="report_13_8"></td><td id="report_13_9" class="td_total"></td>
+	</tr>
+</table>
+參考資料：<br/>
+<a href="http://www.capitalfutures.com.tw/option/default.asp" target="new">群益期貨 - 選擇權即時報價</a><br/>
+<a href="http://tw.myblog.yahoo.com/bnb_777_bnb/" target="new">選擇權搖錢樹</a>
+
+</td>
+<td style="text-align: left;vertical-align:top; width:70px">
+<input type="button" onclick="changePlot('05')" value="05 買權多頭價差" class="btn_style">
+<input type="button" onclick="changePlot('06')" value="06 賣權多頭價差" class="btn_style">
+<input type="button" onclick="changePlot('07')" value="07 買權空頭價差" class="btn_style">
+<input type="button" onclick="changePlot('08')" value="08 賣權空頭價差" class="btn_style">
+<input type="button" onclick="changePlot('09')" value="09 作多價外逆轉組合" class="btn_style">
+<input type="button" onclick="changePlot('10')" value="10 作空價外逆轉組合" class="btn_style">
+<input type="button" onclick="changePlot('11')" value="11 買進跨式部位" class="btn_style">
+<input type="button" onclick="changePlot('12')" value="12 買進勒式部位" class="btn_style">
+<input type="button" onclick="changePlot('13')" value="13 賣出跨式部位" class="btn_style">
+<input type="button" onclick="changePlot('14')" value="14 賣出勒式部位" class="btn_style">
+<input type="button" onclick="changePlot('15')" value="15 買進買權蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('16')" value="16 買進賣權蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('17')" value="17 買進買權兀鷹部位" class="btn_style">
+<input type="button" onclick="changePlot('18')" value="18 買進賣權兀鷹部位" class="btn_style">
+<input type="button" onclick="changePlot('19')" value="19 賣出買權蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('20')" value="20 賣出賣權蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('21')" value="21 賣出買權兀鷹部位" class="btn_style">
+<input type="button" onclick="changePlot('22')" value="22 賣出賣權兀鷹部位" class="btn_style">
+<input type="button" onclick="changePlot('23')" value="23 買進買權調整蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('24')" value="24 買進賣權調整蝶式部位" class="btn_style">
+<input type="button" onclick="changePlot('25')" value="25 買進鐵蝴蝶部位" class="btn_style">
+<input type="button" onclick="changePlot('26')" value="26 賣出鐵蝴蝶部位" class="btn_style">
+<input type="button" onclick="changePlot('31')" value="31 買進組合式期貨" class="btn_style">
+<input type="button" onclick="changePlot('32')" value="32 賣出組合式期貨" class="btn_style">
+<input type="button" onclick="changePlot('33')" value="33 買權比率價差部位" class="btn_style">
+<input type="button" onclick="changePlot('34')" value="34 賣權比率價差部位" class="btn_style">
+<input type="button" onclick="changePlot('35')" value="35 買權逆比率價差部位" class="btn_style">
+<input type="button" onclick="changePlot('36')" value="36 賣權逆比率價差部位" class="btn_style">
+<input type="button" onclick="changePlot('37')" value="37 買進篇空跨式部位" class="btn_style">
+</td>
+
+</tr>
+</table>
+</body>
+</html>
